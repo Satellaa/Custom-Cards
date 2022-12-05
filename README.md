@@ -22,4 +22,4 @@ All custom cards here are formatted with ***custom card EDOPro*** and therefore 
 
 
 [df2]: <https://drive.google.com/file/d/1N-Zbb6g6b-L1thwoX-p1TRlx0L0KK58S/view?usp=drivesdk>
-[img1]: <https://drive.google.com/file/d/1NFob5NROS1J7sqZ1CbMG3XfSck5FK4sP/view?usp=drivesdk>
+[img1]: <https://user-images.githubusercontent.com/107518574/205525916-bc2f4be4-5f34-4b0c-ae0a-8211ae40f8ab.jpg>
