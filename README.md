@@ -14,8 +14,13 @@ All custom cards here are formatted with ***custom card EDOPro*** and therefore 
 ## How to use custom cards in a duel?
 Custom cards can be used in the game in ***LAN + AI*** mode and in ***online*** mode, on any EDOPro server, however, there are a few things you should keep in mind:
 
-1- Both players need to have custom cards in their game
-2- 
+ 1. Both players need to have custom cards in their game
+
+2. When creating a duel server, some changes need to be made in the duel settings, namely changing the Allowed Cards  option to Anything Goes
+![imagem-2][img2]
+3. If the game still prevents you from creating the game, check the option ***Don't check Deck Contents*** is active or not
+4. Custom cards can be used with ***anybanlist***, EDOPro need not worry about them being banned as they are unofficial
+
 
 
 
