@@ -1,4 +1,4 @@
-# Lilac - Custom Card
+# About Custom Card
 ## How to install custom cards?
 This method works for both PC and Mobile EDOPro, but on mobile the ***ProjectIgnis*** folder can be named ***EDOPRO***.
 
