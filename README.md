@@ -9,7 +9,7 @@ This method works for both PC and Mobile EDOPro, but on mobile the ***ProjectIgn
 ## How to use custom cards in the Deck?
 All custom cards here are formatted with ***custom card EDOPro*** and therefore do not appear by default in your card catalog, to use them, you must enable the ***alternative formats*** option available in Deck editing.
 
-
+![imagem-1][img1]
 
 
 
@@ -22,3 +22,4 @@ All custom cards here are formatted with ***custom card EDOPro*** and therefore 
 
 
 [df2]: <https://drive.google.com/file/d/1N-Zbb6g6b-L1thwoX-p1TRlx0L0KK58S/view?usp=drivesdk>
+[img1]: <https://drive.google.com/file/d/1NFob5NROS1J7sqZ1CbMG3XfSck5FK4sP/view?usp=drivesdk>
