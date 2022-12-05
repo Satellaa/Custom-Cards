@@ -1,5 +1,5 @@
 # Lilac - Custom Card
-## How to install Custom Cards?
+## How to install custom cards?
 This method works for both PC and Mobile EDOPro, but on mobile the ***ProjectIgnis*** folder can be named ***EDOPRO***.
 
 1. Click [here][df2] to download the file [user_config.json][df2]
@@ -11,9 +11,11 @@ All custom cards here are formatted with ***custom card EDOPro*** and therefore 
 
 ![imagem-1][img1]
 
+## How to use custom cards in a duel?
+Custom cards can be used in the game in ***LAN + AI*** mode and in ***online*** mode, on any EDOPro server, however, there are a few things you should keep in mind:
 
-
-
+1- Both players need to have custom cards in their game
+2- 
 
 
 
