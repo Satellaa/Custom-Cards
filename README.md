@@ -21,7 +21,8 @@ Custom cards can be used in the game in ***LAN + AI*** mode and in ***online*** 
 3. If the game still prevents you from creating the game, check the option ***Don't check Deck Contents*** is active or not
 4. Custom cards can be used with ***anybanlist***, EDOPro need not worry about them being banned as they are unofficial
 
-
+## BUGS
+If you find any BUG in the effects of the cards, please use the ***ISSUE*** tab to report, the same goes for errors in  PSCT, errors in card interactions, etc.  Preferably this is done in as much detail as possible.
 
 
 
