@@ -6,7 +6,7 @@ This method works for both PC and Mobile EDOPro, but on mobile the ***ProjectIgn
 2. Once the download is done, move it to the ***ProjectIgnis/configs*** folder
 3. Open EDOPro and wait for the files to be downloaded
 
-As long as you have `user_config.json` on your ***computer*** or ***phone***, the game will always update itself, so you don't have to download it again and again every time custom cards are updated
+As long as you have `user_config.json` on your ***device***, the game will always update itself, so you don't have to download it again and again every time custom cards are updated
 
 ## How to use custom cards in the Deck?
 All custom cards here are formatted with ***custom card EDOPro*** and therefore do not appear by default in your card catalog, to use them, you must enable the ***alternative formats*** option available in Deck editing.
