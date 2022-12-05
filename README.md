@@ -1,4 +1,6 @@
 # Custom Cards for EDOPro
+You can also submit a request here, but before you do that please read [Basic Card Submission Guidelines](https://drive.google.com/file/d/1Nlvx4gQQt4OQQIODAOdsG_VH3docKFdK/view?usp=drivesdk)
+
 ## How to install custom cards?
 This method works for both PC and Mobile EDOPro, but on mobile the ***ProjectIgnis*** folder can be named ***EDOPRO***.
 
