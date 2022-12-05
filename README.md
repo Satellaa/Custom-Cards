@@ -18,6 +18,8 @@ You have a couple of options:
 1. Port forward the LAN ports used by EDOPro and give your friend your IP to join in LAN mode.
 2. You and your friends can set up a VPN like [ZeroTier][df3] so everybody is on the same virtual LAN. Then you should be able to refresh the LAN room list or connect to the IP provided by the VPN. Both players must have the custom card databases to see what the cards are, and the hosting player must have the card scripts.
 
+Keep in mind that all custom cards are in "custom" format, so you need to set "Allowed Cards" to "Anything goes"
+![imagem-2][img2]
 
 ## BUGS
 If you find any BUG in the effects of the cards, please use the ***ISSUE*** tab to report, the same goes for errors in  PSCT, errors in card interactions, etc.  Preferably this is done in as much detail as possible.
