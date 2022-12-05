@@ -13,15 +13,11 @@ All custom cards here are formatted with ***custom card EDOPro*** and therefore 
 
 ![imagem-1][img1]
 
-## How to use custom cards in a duel?
-Custom cards can be used in the game in ***LAN + AI*** mode and in ***online*** mode, on any EDOPro server, however, there are a few things you should keep in mind:
+## How do I play with custom cards or against bots with friends on LAN?
+You have a couple of options:
+1. Port forward the LAN ports used by EDOPro and give your friend your IP to join in LAN mode.
+2. You and your friends can set up a VPN like [ZeroTier][df3] so everybody is on the same virtual LAN. Then you should be able to refresh the LAN room list or connect to the IP provided by the VPN. Both players must have the custom card databases to see what the cards are, and the hosting player must have the card scripts.
 
- 1. Both players need to have custom cards in their game
-
-2. When creating a duel server, some changes need to be made in the duel settings, namely changing the Allowed Cards  option to Anything Goes
-![imagem-2][img2]
-3. If the game still prevents you from creating a duel, try enabling ***Don't check Deck Contents***
-4. Custom cards can be used with ***anybanlist***, EDOPro need not worry about them being banned as they are unofficial
 
 ## BUGS
 If you find any BUG in the effects of the cards, please use the ***ISSUE*** tab to report, the same goes for errors in  PSCT, errors in card interactions, etc.  Preferably this is done in as much detail as possible.
@@ -34,3 +30,4 @@ If you find any BUG in the effects of the cards, please use the ***ISSUE*** tab 
 [df2]: <https://drive.google.com/file/d/1N-Zbb6g6b-L1thwoX-p1TRlx0L0KK58S/view?usp=drivesdk>
 [img1]: <https://user-images.githubusercontent.com/107518574/205525916-bc2f4be4-5f34-4b0c-ae0a-8211ae40f8ab.jpg>
 [img2]: <https://user-images.githubusercontent.com/107518574/205527563-42a0e83d-a2a9-4861-a0e6-b3c9b5c091a4.jpg>
+[df3]: <https://www.zerotier.com/>
