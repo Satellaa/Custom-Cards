@@ -19,6 +19,7 @@ You have a couple of options:
 2. You and your friends can set up a VPN like [ZeroTier][df3] so everybody is on the same virtual LAN. Then you should be able to refresh the LAN room list or connect to the IP provided by the VPN. Both players must have the custom card databases to see what the cards are, and the hosting player must have the card scripts.
 
 Keep in mind that all custom cards are in ***custom format***, so you need to set ***Allowed Cards*** in the room setting to ***Anything goes***
+
 ![imagem-2][img2]
 
 ## BUGS
