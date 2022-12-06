@@ -4,9 +4,9 @@ You can also submit a request here, but before you do that please read [Basic Ca
 ## How to install custom cards?
 This method works for both PC and Mobile EDOPro, but on mobile the ***ProjectIgnis*** folder can be named ***EDOPRO***.
 
-1. Click [here][df2] to download the file [user_config.json][df2]
-2. Once the download is done, move it to the ***ProjectIgnis/configs*** folder
-3. Open or restart EDOPro and wait for the files to be downloaded
+Step 1: Click [here][df2] to download the file [user_config.json][df2]
+Step 2: Once the download is done, move it to the ***ProjectIgnis/configs*** folder
+Step 3: Open or restart EDOPro and wait for the files to be downloaded
 
 As long as you have `user_config.json` on your ***device***, the game will always update itself, so you don't have to download it again and again every time custom cards are updated
 
