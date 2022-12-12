@@ -83,7 +83,7 @@ function s.atsop(e,tp,eg,ep,ev,re,r,rp)
     if g:IsExists(s.atsfilter2,1,nil) then
     local tc=g:Filter(s.atsfilter2,nil)
     if tc then end
-    local e1=Effect.CreateEffect(e:GetHandler())
+        local e1=Effect.CreateEffect(e:GetHandler())
 	e1:SetDescription(aux.Stringid(id,2))
 	e1:SetType(EFFECT_TYPE_FIELD)
 	e1:SetCode(EFFECT_TRAP_ACT_IN_SET_TURN)
