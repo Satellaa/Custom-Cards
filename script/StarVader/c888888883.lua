@@ -2,7 +2,7 @@
 --Scripted by Lilac-chan
 local s,id=GetID()
 function s.initial_effect(c)
-    local e1=Effect.CreateEffect(c)
+    	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SEARCH+CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
@@ -14,7 +14,7 @@ function s.initial_effect(c)
 	local e2=e1:Clone()
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
 	c:RegisterEffect(e2)
-    local e3=Effect.CreateEffect(c)
+    	local e3=Effect.CreateEffect(c)
 	e3:SetCategory(CATEGORY_REMOVE)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
 	e3:SetProperty(EFFECT_FLAG_CARD_TARGET+EFFECT_FLAG_DELAY)
@@ -23,7 +23,7 @@ function s.initial_effect(c)
 	e3:SetCountLimit(1,id+1)
 	e3:SetCondition(s.remcon)
 	e3:SetCost(s.remcost)
-    e3:SetTarget(s.remtg)
+    	e3:SetTarget(s.remtg)
 	e3:SetOperation(s.remop)
 	c:RegisterEffect(e3)
 end
@@ -78,5 +78,5 @@ function s.remop(e,tp,eg,ep,ev,re,r,rp)
     aux.DefaultFieldReturnOp,
     function() return Duel.IsTurnPlayer(1-tp) end,
     RESET_PHASE+PHASE_END+RESET_OPPO_TURN,resetcount)
-end
+   end
 end
