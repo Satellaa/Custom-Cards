@@ -3,8 +3,8 @@
 -- Scripted by Lilac
 local s,id=GetID()
 function s.initial_effect(c)
-    -- Add 1 card from your Deck to your hand
-    local e1=Effect.CreateEffect(c)
+    	-- Add 1 card from your Deck to your hand
+     	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_TOHAND+CATEGORY_SEARCH+CATEGORY_HANDES)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
@@ -23,7 +23,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-    --Opponent can negate this effect by halve their LP
+    	--Opponent can negate this effect by halve their LP
 	if Duel.SelectYesNo(1-tp,aux.Stringid(id,1)) then
 		Duel.SetLP(1-tp,math.floor(Duel.GetLP(1-tp)/2),REASON_EFFECT)
 		if Duel.IsChainDisablable(0) then
@@ -40,7 +40,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 		e1:SetCode(EVENT_PHASE+PHASE_END)
 		e1:SetCountLimit(1)
-        e1:SetLabel(1-tp)
+        	e1:SetLabel(1-tp)
 		e1:SetOperation(s.loseop)
 		Duel.RegisterEffect(e1,tp)
 	end
