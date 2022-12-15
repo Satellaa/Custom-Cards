@@ -33,7 +33,7 @@ function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDiscardDeck(1-tp,1) and Duel.GetFieldGroupCount(1-tp,LOCATION_DECK,0)>4 end
+	if chk==0 then return Duel.IsPlayerCanDiscardDeck(1-tp,4) and Duel.GetFieldGroupCount(1-tp,LOCATION_DECK,0)>4 end
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DECKDES,nil,2,1-tp,3)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,1-tp,LOCATION_DECK)
 end
@@ -41,7 +41,7 @@ function s.filter(c,e,tp)
 	return c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
-	if not Duel.IsPlayerCanDiscardDeck(1-tp,1) then return end
+	if not Duel.IsPlayerCanDiscardDeck(1-tp,4) then return end
     Duel.ConfirmDecktop(1-tp,5)
     local g=Duel.GetDecktopGroup(1-tp,5)
 	local pg=g:Filter(s.filter,nil,e,1-tp)
@@ -52,10 +52,9 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 		Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_SPSUMMON)
 		local sg=pg:Select(1-tp,1,ft,nil)
 		if #sg==0 then return end
-		local c=e:GetHandler()
 		for sc in sg:Iter() do
 		if Duel.SpecialSummonStep(sc,0,1-tp,1-tp,false,false,POS_FACEUP) then
-       g:RemoveCard(sc)
+        g:RemoveCard(sc)
 			end
 		end
 	if Duel.SpecialSummonComplete()>0 then
@@ -63,12 +62,12 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
     if #og==0 then return end
     Duel.BreakEffect()
     local resetcount=1
-if Duel.IsTurnPlayer(1-tp) and Duel.GetCurrentPhase()==PHASE_END then resetcount=2 end
-aux.RemoveUntil(og,nil,REASON_EFFECT,PHASE_END,id,e,tp,
+    if Duel.IsTurnPlayer(1-tp) and Duel.GetCurrentPhase()==PHASE_END then resetcount=2 end
+    aux.RemoveUntil(og,nil,REASON_EFFECT,PHASE_END,id,e,tp,
     aux.DefaultFieldReturnOp,
     function() return Duel.IsTurnPlayer(1-tp) end,
     RESET_PHASE+PHASE_END+RESET_OPPO_TURN,resetcount)
-		end
+	end
 end
 Duel.Remove(g,POS_FACEUP,REASON_EFFECT+REASON_REVEAL)
 end
@@ -90,5 +89,5 @@ function s.spop2(e,tp,eg,ep,ev,re,r,rp)
 	if #g==2 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 	end
-end
+  end
 end

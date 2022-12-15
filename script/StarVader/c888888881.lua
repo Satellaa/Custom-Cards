@@ -72,7 +72,8 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.rtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and chkc:IsAbleToRemove() end
-	if chk==0 then return Duel.IsExistingTarget(Card.IsAbleToRemove,tp,0,LOCATION_MZONE,1,nil) end
+	if chk==0 then return Duel.IsExistingTarget(Card.IsAbleToRemove,tp,0,LOCATION_MZONE,1,nil)
+	  and Duel.IsPlayerCanDraw(tp,1) and Duel.IsPlayerCanDraw(1-tp,1) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
 	local g=Duel.SelectTarget(tp,Card.IsAbleToRemove,tp,0,LOCATION_MZONE,1,1,nil)
 	Duel.SetOperationInfo(0,CATEGORY_REMOVE,g,1,0,0)
@@ -101,8 +102,7 @@ function s.tgcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp and (ph==PHASE_END) and eg:IsExists(s.tgfilter,1,nil,1-tp)
 end
 function s.tgtg(e,tp,eg,ep,ev,re,r,rp,chk)
-  if chk==0 then return (Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)>0 or 
-    Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)>0) and Duel.IsPlayerCanDraw(tp) end
+  if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)>0 and Duel.IsPlayerCanDraw(tp,1) end
 	local g=eg:Filter(s.tgfilter,nil,1-tp)
 	Duel.SetTargetCard(g)
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,#g,0,0)
