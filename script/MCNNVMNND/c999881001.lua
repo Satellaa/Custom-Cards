@@ -22,8 +22,7 @@ function s.target(e,tp,eg,ep,ev,re,r,rp,chk)
  end
 end
 function s.activate(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-    	--Opponent can negate this effect by halve their LP
+	--Opponent can negate this effect by halve their LP
 	if Duel.SelectYesNo(1-tp,aux.Stringid(id,1)) then
 		Duel.SetLP(1-tp,math.floor(Duel.GetLP(1-tp)/2),REASON_EFFECT)
 		if Duel.IsChainDisablable(0) then
@@ -36,7 +35,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
-		local e1=Effect.CreateEffect(c)
+		local e1=Effect.CreateEffect(e:GetHandler())
 		e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
 		e1:SetCode(EVENT_PHASE+PHASE_END)
 		e1:SetCountLimit(1)
