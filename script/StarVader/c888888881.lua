@@ -101,7 +101,8 @@ function s.tgcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetTurnPlayer()~=tp and (ph==PHASE_END) and eg:IsExists(s.tgfilter,1,nil,1-tp)
 end
 function s.tgtg(e,tp,eg,ep,ev,re,r,rp,chk)
-    if chk==0 then return true end
+  if chk==0 then return (Duel.GetFieldGroupCount(tp,LOCATION_HAND,0)>0 or 
+    Duel.GetFieldGroupCount(tp,0,LOCATION_HAND)>0) and Duel.IsPlayerCanDraw(tp) end
 	local g=eg:Filter(s.tgfilter,nil,1-tp)
 	Duel.SetTargetCard(g)
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,#g,0,0)
