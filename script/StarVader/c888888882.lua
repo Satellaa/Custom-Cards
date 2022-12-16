@@ -33,7 +33,7 @@ function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDiscardDeck(1-tp,4) and Duel.GetFieldGroupCount(1-tp,LOCATION_DECK,0)>4 end
+	if chk==0 then return Duel.IsPlayerCanDiscardDeck(1-tp,3) and Duel.GetFieldGroupCount(1-tp,LOCATION_DECK,0)>4 end
 	Duel.SetPossibleOperationInfo(0,CATEGORY_DECKDES,nil,2,1-tp,3)
 	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,2,1-tp,LOCATION_DECK)
 end
@@ -41,7 +41,7 @@ function s.filter(c,e,tp)
 	return c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
-	if not Duel.IsPlayerCanDiscardDeck(1-tp,4) then return end
+	if not Duel.IsPlayerCanDiscardDeck(1-tp,3) then return end
     Duel.ConfirmDecktop(1-tp,5)
     local g=Duel.GetDecktopGroup(1-tp,5)
 	local pg=g:Filter(s.filter,nil,e,1-tp)
