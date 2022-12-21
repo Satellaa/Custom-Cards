@@ -55,7 +55,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local rm=Duel.GetFirstTarget()
 	if not rm:IsRelateToEffect(e) then return end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local g=Duel.SelectMatchingCard(tp,s.cfilter2,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,rm)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.cfilter2),tp,LOCATION_DECK+LOCATION_GRAVE,0,1,1,nil,rm)
 	if #g>0 then
 		Duel.SendtoHand(g,nil,REASON_EFFECT)
 		Duel.ConfirmCards(1-tp,g)
