@@ -18,7 +18,7 @@ function s.initial_effect(c)
     local e2=Effect.CreateEffect(c)
 	e2:SetCategory(CATEGORY_TOHAND)
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
-	e2:SetProperty(EFFECT_FLAG_DAMAGE_STEP+EFFECT_FLAG_DELAY)
+	e2:SetProperty(EFFECT_FLAG_DELAY)
 	e2:SetCode(EVENT_TO_GRAVE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.rcon)
@@ -29,7 +29,7 @@ end
 s.listed_names={69035382}
 s.listed_series={0x7d6}
 function s.cfilter(c)
-	return c:IsType(TYPE_RITUAL) and c:IsMonster() and c:IsDiscardable(REASON_EFFECT)
+	return c:IsRitualMonster() and c:IsDiscardable(REASON_EFFECT)
 end
 function s.ngcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return not e:GetHandler():IsPublic() end
