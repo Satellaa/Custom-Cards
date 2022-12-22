@@ -73,7 +73,7 @@ end
 function s.remop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) then
-	local resetcount=1
+    local resetcount=1
     if Duel.IsTurnPlayer(1-tp) and Duel.GetCurrentPhase()==PHASE_END then resetcount=2 end
     aux.RemoveUntil(tc,nil,REASON_EFFECT,PHASE_END,id,e,tp,
     aux.DefaultFieldReturnOp,
