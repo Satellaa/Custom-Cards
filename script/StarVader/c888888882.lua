@@ -2,9 +2,9 @@
 --Scripted by Lilac-chan
 local s,id=GetID()
 function s.initial_effect(c)
-c:EnableReviveLimit()
+	c:EnableReviveLimit()
 	Xyz.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsAttribute,ATTRIBUTE_DARK),8,3,s.ovfilter,aux.Stringid(id,0))
-    local e1=Effect.CreateEffect(c)
+    	local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_SPECIAL_SUMMON+CATEGORY_REMOVE)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
@@ -14,14 +14,14 @@ c:EnableReviveLimit()
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
-    local e2=Effect.CreateEffect(c)
-    e2:SetCategory(CATEGORY_REMOVE+CATEGORY_SPECIAL_SUMMON)
+    	local e2=Effect.CreateEffect(c)
+    	e2:SetCategory(CATEGORY_REMOVE+CATEGORY_SPECIAL_SUMMON)
 	e2:SetType(EFFECT_TYPE_QUICK_O)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetHintTiming(0,TIMING_MAIN_END)
 	e2:SetCountLimit(1,{id,1})
-    e2:SetTarget(s.sptg2)
+    	e2:SetTarget(s.sptg2)
 	e2:SetOperation(s.spop2)
 	c:RegisterEffect(e2)
 end
@@ -42,23 +42,23 @@ function s.filter(c,e,tp)
 end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	if not Duel.IsPlayerCanDiscardDeck(1-tp,3) then return end
-    Duel.ConfirmDecktop(1-tp,5)
-    local g=Duel.GetDecktopGroup(1-tp,5)
+    	Duel.ConfirmDecktop(1-tp,5)
+    	local g=Duel.GetDecktopGroup(1-tp,5)
 	local pg=g:Filter(s.filter,nil,e,1-tp)
 	local ft=math.min(Duel.GetLocationCount(1-tp,LOCATION_MZONE),2)
 	Duel.DisableShuffleCheck()
 	if ft>0 and #pg>0 then
-		if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then ft=1 end
-		Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_SPSUMMON)
-		local sg=pg:Select(1-tp,1,ft,nil)
-		if #sg==0 then return end
-		for sc in sg:Iter() do
-		if Duel.SpecialSummonStep(sc,0,1-tp,1-tp,false,false,POS_FACEUP) then
+	if Duel.IsPlayerAffectedByEffect(tp,CARD_BLUEEYES_SPIRIT) then ft=1 end
+	Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_SPSUMMON)
+	local sg=pg:Select(1-tp,1,ft,nil)
+	if #sg==0 then return end
+	for sc in sg:Iter() do
+	if Duel.SpecialSummonStep(sc,0,1-tp,1-tp,false,false,POS_FACEUP) then
         g:RemoveCard(sc)
-			end
-		end
-	if Duel.SpecialSummonComplete()>0 then
-	local og=Duel.GetOperatedGroup()
+ end
+end
+    if Duel.SpecialSummonComplete()>0 then
+    local og=Duel.GetOperatedGroup()
     if #og==0 then return end
     Duel.BreakEffect()
     local resetcount=1
@@ -67,7 +67,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
     aux.DefaultFieldReturnOp,
     function() return Duel.IsTurnPlayer(1-tp) end,
     RESET_PHASE+PHASE_END+RESET_OPPO_TURN,resetcount)
-	end
+  end
 end
 Duel.Remove(g,POS_FACEUP,REASON_EFFECT+REASON_REVEAL)
 end
