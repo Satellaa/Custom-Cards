@@ -2,31 +2,31 @@
 --Scripted by Lilac-chan
 local s,id=GetID()
 function s.initial_effect(c)
-    c:SetUniqueOnField(1,0,id)
-    local e1=Effect.CreateEffect(c)
+    	c:SetUniqueOnField(1,0,id)
+    	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
-    e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
+    	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
 	e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_HAND)
 	e1:SetHintTiming(0,TIMING_MAIN_END)
 	e1:SetCountLimit(1,id)
-    e1:SetCondition(s.spcon)
+    	e1:SetCondition(s.spcon)
 	e1:SetTarget(s.sptg)
 	e1:SetOperation(s.spop)
 	c:RegisterEffect(e1)
-    local e2=Effect.CreateEffect(c)
-    e2:SetCategory(CATEGORY_REMOVE)
-    e2:SetType(EFFECT_TYPE_QUICK_O)
+    	local e2=Effect.CreateEffect(c)
+    	e2:SetCategory(CATEGORY_REMOVE)
+    	e2:SetType(EFFECT_TYPE_QUICK_O)
 	e2:SetCode(EVENT_FREE_CHAIN)
-    e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
-    e2:SetRange(LOCATION_MZONE)
+    	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+    	e2:SetRange(LOCATION_MZONE)
 	e2:SetHintTiming(0,TIMING_MAIN_END)
-    e2:SetCountLimit(1)
+    	e2:SetCountLimit(1)
 	e2:SetTarget(s.rtg)
 	e2:SetOperation(s.rop)
 	c:RegisterEffect(e2)
-    local e3=Effect.CreateEffect(c)
+    	local e3=Effect.CreateEffect(c)
 	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetCategory(CATEGORY_TOGRAVE)
 	e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_TRIGGER_O)
@@ -36,13 +36,13 @@ function s.initial_effect(c)
 	e3:SetCondition(s.tgcon)
 	e3:SetTarget(s.tgtg)
 	e3:SetOperation(s.tgop)
-    c:RegisterEffect(e3)
-    aux.GlobalCheck(s,function()
-		local ge1=Effect.CreateEffect(c)
-		ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-		ge1:SetCode(EVENT_REMOVE)
-		ge1:SetOperation(s.checkop)
-		Duel.RegisterEffect(ge1,0)
+    	c:RegisterEffect(e3)
+    	aux.GlobalCheck(s,function()
+	local ge1=Effect.CreateEffect(c)
+	ge1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	ge1:SetCode(EVENT_REMOVE)
+	ge1:SetOperation(s.checkop)
+	Duel.RegisterEffect(ge1,0)
   end)
 end
 s.listed_series={0x7CC}
@@ -81,7 +81,7 @@ end
 function s.rop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) then
-	local resetcount=1
+    local resetcount=1
     if Duel.IsTurnPlayer(1-tp) and Duel.GetCurrentPhase()==PHASE_END then resetcount=2 end
     if aux.RemoveUntil(tc,nil,REASON_EFFECT,PHASE_END,id,e,tp,
     aux.DefaultFieldReturnOp,
@@ -90,10 +90,10 @@ function s.rop(e,tp,eg,ep,ev,re,r,rp)
      if Duel.IsPlayerCanDraw(tp,1) and Duel.IsPlayerCanDraw(1-tp,1) then
      Duel.Draw(tp,1,REASON_EFFECT)
 	 Duel.Draw(1-tp,1,REASON_EFFECT)
-end
-end
-end
-end
+    end
+   end
+  end
+ end
 function s.tgfilter(c,tp)
     return c:IsPreviousLocation(LOCATION_REMOVED) and c:IsControler(tp) and not c:IsReason(REASON_SPSUMMON)
 end
@@ -114,6 +114,6 @@ function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 	local ct=og:FilterCount(Card.IsLocation,nil,LOCATION_GRAVE)
 	if ct>0 and Duel.DiscardHand(tp,nil,ct,ct,REASON_EFFECT+REASON_DISCARD) then
 	Duel.Draw(tp,ct,REASON_EFFECT)
-end
-end
+  end
+ end
 end
