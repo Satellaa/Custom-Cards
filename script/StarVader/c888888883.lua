@@ -8,6 +8,7 @@ function s.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCode(EVENT_SUMMON_SUCCESS)
 	e1:SetCountLimit(1,id)
+	e1:SetCost(s.thcost)
 	e1:SetTarget(s.thtg)
 	e1:SetOperation(s.thop)
 	c:RegisterEffect(e1)
@@ -28,28 +29,28 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
 end
 s.listed_series={0x7CC}
-function s.disfilter(c)
-	return c:IsRace(RACE_MACHINE) and c:IsDiscardable(REASON_EFFECT)
+function s.costfilter(c)
+	return c:IsRace(RACE_MACHINE) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsDiscardable()
+end
+function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.IsExistingMatchingCard(s.costfilter,tp,LOCATION_HAND,0,1,nil) end
+	Duel.DiscardHand(tp,s.costfilter,1,1,REASON_COST+REASON_DISCARD,nil)
 end
 function s.thfilter(c)
 	return c:IsSetCard(0x7CC) and c:IsMonster() and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.disfilter,tp,LOCATION_HAND,0,1,nil)
-		and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
-	if Duel.DiscardHand(tp,s.disfilter,1,1,REASON_EFFECT+REASON_DISCARD,nil)>0 then
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
-	local hg=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil)
-	if #hg>0 then 
-		Duel.BreakEffect()
-		Duel.SendtoHand(hg,nil,REASON_EFFECT)
-		Duel.ConfirmCards(1-tp,hg)
+	local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil)
+	if #g>0 then
+		Duel.SendtoHand(g,nil,REASON_EFFECT)
+		Duel.ConfirmCards(1-tp,g)
+	end
 end
-  end
-    end
 function s.remcon(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	local cont=Duel.GetChainInfo(0,CHAININFO_TRIGGERING_CONTROLER)
