@@ -23,7 +23,7 @@ function s.initial_effect(c)
 	e3:SetCountLimit(1,{id,1})
 	e3:SetCondition(s.remcon)
 	e3:SetCost(s.remcost)
-    e3:SetTarget(s.remtg)
+    	e3:SetTarget(s.remtg)
 	e3:SetOperation(s.remop)
 	c:RegisterEffect(e3)
 end
@@ -61,11 +61,11 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 			e1:SetLabel(tc:GetCode())
 			e1:SetReset(RESET_PHASE+PHASE_END)
 			Duel.RegisterEffect(e1,tp)
-end
-end
-end
-end
-end
+     end
+    end
+   end
+  end
+ end
 function s.aclimit(e,re,tp)
 	return re:GetHandler():IsOriginalCode(e:GetLabel())
 end
@@ -91,7 +91,7 @@ end
 function s.remop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) then
-	local resetcount=1
+    local resetcount=1
     if Duel.IsTurnPlayer(1-tp) and Duel.GetCurrentPhase()==PHASE_END then resetcount=2 end
     aux.RemoveUntil(tc,nil,REASON_EFFECT,PHASE_END,id,e,tp,
     aux.DefaultFieldReturnOp,
