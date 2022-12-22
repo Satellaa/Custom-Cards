@@ -47,16 +47,10 @@ function s.remop(e,tp,eg,ep,ev,re,r,rp)
     aux.DefaultFieldReturnOp,
     function() return Duel.IsTurnPlayer(1-tp) end,
     RESET_PHASE+PHASE_END+RESET_OPPO_TURN,resetcount)
-end
+ end
 end
 function s.rcon(e,tp,eg,ep,ev,re,r,rp)
-	local c=e:GetHandler()
-	if rp==1-tp and c:IsPreviousControler(tp) then
-		e:SetLabel(1)
-	else
-		e:SetLabel(0)
-	end
-	return c:IsPreviousLocation(LOCATION_HAND) and (r&REASON_EFFECT+REASON_DISCARD)==REASON_EFFECT+REASON_DISCARD
+	return e:GetHandler():GetPreviousLocation()==LOCATION_HAND and (r&REASON_DISCARD)~=0
 end
 function s.rtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc:IsControler(1-tp) and chkc:IsAbleToRemove() end
@@ -74,5 +68,5 @@ function s.rop(e,tp,eg,ep,ev,re,r,rp)
     aux.DefaultFieldReturnOp,
     function() return Duel.IsTurnPlayer(1-tp) end,
     RESET_PHASE+PHASE_END+RESET_OPPO_TURN,resetcount)
-end
+ end
 end

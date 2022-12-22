@@ -27,7 +27,7 @@ c:EnableReviveLimit()
 end
 s.listed_series={0x7CC}
 function s.ovfilter(c,tp,xyzc)
-   return c:IsFaceup() and c:IsLevelAbove(8) and c:IsSetCard(0x7CC,xyzc,SUMMON_TYPE_XYZ,tp) and (Duel.GetCurrentPhase()==PHASE_MAIN1) and not Duel.CheckPhaseActivity()
+   return c:IsFaceup() and c:IsLevelAbove(8) and c:IsSetCard(0x7CC,xyzc,SUMMON_TYPE_XYZ,tp) and (Duel.GetCurrentPhase()==PHASE_MAIN1 or PHASE_2) and not Duel.CheckPhaseActivity()
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ)
