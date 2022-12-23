@@ -31,7 +31,7 @@ end
 s.listed_series={SET_TELLARKNIGHT}
 s.listed_names={41510920,5026221}
 function s.counterfilter(c)
-	return c:IsSetCard(SET_TELLARKNIGHT)
+	return c:IsSetCard({SET_TELLARKNIGHT,SET_CONSTELLAR})
 end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetCustomActivityCount(id,tp,ACTIVITY_SPSUMMON)==0 end
