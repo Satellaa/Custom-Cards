@@ -31,7 +31,7 @@ end
 s.listed_series={SET_TELLARKNIGHT}
 s.listed_names={41510920,5026221}
 function s.counterfilter(c)
-	return c:IsSetCard(SET_TELLARKNIGHT)
+	return c:IsSetCard({SET_TELLARKNIGHT,SET_CONSTELLAR})
 end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.GetCustomActivityCount(id,tp,ACTIVITY_SPSUMMON)==0 end
@@ -46,7 +46,7 @@ function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.RegisterEffect(e1,tp)
 end
 function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
-	return not c:IsSetCard(SET_TELLARKNIGHT)
+	return not c:IsSetCard({SET_TELLARKNIGHT,SET_CONSTELLAR})
 end
 function s.matfilter(c,lc,sumtype,tp)
 	return c:IsSetCard(SET_TELLARKNIGHT,lc,sumtype,tp) and not c:IsType(TYPE_LINK,lc,sumtype,tp)
