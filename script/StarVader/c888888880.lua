@@ -26,7 +26,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e3)
     	local e4=e3:Clone()
 	e4:SetCode(EVENT_REMOVE)
-	c:RegisterEffect(e4,false,REGISTER_FLAG_VADER)
+	c:RegisterEffect(e4)
 end
 s.listed_series={0x7CC}
 function s.remtg(e,tp,eg,ep,ev,re,r,rp,chk)
