@@ -56,7 +56,7 @@ function s.initial_effect(c)
 end
 s.listed_series={0x7CC}
 function s.cfilter(c,p)
-	return c:IsPreviousControler(p) and c:IsFaceup() and c:IsMonster()
+	return c:IsPreviousControler(p) and c:IsPreviousLocation(LOCATION_MZONE) and c:IsFaceup() and c:IsMonster()
 end
 function s.checkop(e,tp,eg,ep,ev,re,r,rp)
 	for p=0,1 do
