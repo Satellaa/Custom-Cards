@@ -2,6 +2,14 @@
 -- Scripted by Lilac
 local s,id=GetID()
 function s.initial_effect(c)
+	c:EnableUnsummonable()
+	--Must be Special Summoned by a "Star-vader" card's effect
+	local e0=Effect.CreateEffect(c)
+	e0:SetType(EFFECT_TYPE_SINGLE)
+	e0:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e0:SetCode(EFFECT_SPSUMMON_CONDITION)
+	e0:SetValue(s.splimit)
+	c:RegisterEffect(e0)
      	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
     	e1:SetCategory(CATEGORY_SPECIAL_SUMMON)
@@ -57,6 +65,9 @@ function s.checkop(e,tp,eg,ep,ev,re,r,rp)
 			Duel.RegisterFlagEffect(1-p,id,RESET_PHASE+PHASE_END,0,1)
 		end
 	end
+end
+function s.splimit(e,se,sp,st)
+	return se:GetHandler():IsSetCard(0x7CC)
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetFlagEffect(tp,id)>=2 and Duel.IsMainPhase()
