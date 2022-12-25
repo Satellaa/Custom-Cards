@@ -61,9 +61,38 @@ function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	if c:IsRelateToEffect(e) then
-		Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)
-	end
+	if not c:IsRelateToEffect(e) then return end
+    if Duel.SpecialSummon(c,0,tp,tp,false,false,POS_FACEUP)>0 then
+    local g=Duel.GetMatchingGroup(Card.IsMonster,1-tp,LOCATION_DECK,0,nil,e,1-tp)
+	if #g>0 and Duel.GetLocationCount(1-tp,LOCATION_MZONE)>0 then
+	Duel.Hint(HINT_SELECTMSG,1-tp,HINTMSG_SPSUMMON)
+	local sg=g:Select(1-tp,1,1,nil)
+	if #sg>0 and Duel.SpecialSummon(sg,0,1-tp,1-tp,false,false,POS_FACEUP) then
+	local og=Duel.GetOperatedGroup()
+    if #og==0 then return end
+    local resetcount=1
+    if Duel.IsTurnPlayer(1-tp) and Duel.GetCurrentPhase()==PHASE_END then resetcount=2 end
+    if aux.RemoveUntil(og,nil,REASON_EFFECT,PHASE_END,id,e,tp,
+    aux.DefaultFieldReturnOp,
+    function() return Duel.IsTurnPlayer(1-tp) end,
+    RESET_PHASE+PHASE_END+RESET_OPPO_TURN,resetcount) then
+    local tc=Duel.GetOperatedGroup():GetFirst()
+		if tc:IsLocation(LOCATION_REMOVED) then
+			local e1=Effect.CreateEffect(e:GetHandler())
+			e1:SetDescription(aux.Stringid(id,2))
+			e1:SetType(EFFECT_TYPE_FIELD)
+			e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+			e1:SetCode(EFFECT_CANNOT_ACTIVATE)
+			e1:SetTargetRange(0,1)
+			e1:SetValue(s.aclimit)
+			e1:SetLabel(tc:GetCode())
+			e1:SetReset(RESET_PHASE+PHASE_END)
+			Duel.RegisterEffect(e1,tp)
+      end
+     end
+    end
+   end
+  end
 end
 function s.spcost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToGraveAsCost() end
