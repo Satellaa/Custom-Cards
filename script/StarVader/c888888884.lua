@@ -94,6 +94,9 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
    end
   end
 end
+function s.aclimit(e,re,tp)
+	return re:GetHandler():IsOriginalCode(e:GetLabel())
+end
 function s.spcost2(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToGraveAsCost() end
 	Duel.SendtoGrave(e:GetHandler(),REASON_COST)
