@@ -1,10 +1,10 @@
---master planning
+-MMaster planning
 
 local s,id=GetID()
 function s.initial_effect(c)
 	--Activate
 	local e1=Effect.CreateEffect(c)
-	e1:SetCategory(CATEGORY_DECKDES+CATEGORY_SPECIAL_SUMMON)
+	e1:SetCategory(CATEGORY_DECKDES)
 	e1:SetType(EFFECT_TYPE_ACTIVATE)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	--e1:SetCountLimit(1,id,EFFECT_COUNT_CODE_OATH)
@@ -40,21 +40,16 @@ function s.tfop(e,tp,eg,ep,ev,re,r,rp)
 		e2:SetReset(RESET_EVENT+RESETS_STANDARD)
 		tc:RegisterEffect(e2,true)
         
-        --aux.DelayedOperation(tc,PHASE_END,id,e,tp,function(ag) Duel.Destroy(ag,REASON_EFFECT) end,nil,0)
+        
     end
     local e1=Effect.CreateEffect(e:GetHandler())
     e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
     e1:SetCode(EVENT_PHASE+PHASE_END)
     e1:SetCountLimit(1)
-  --  e1:SetReset(RESET_PHASE+PHASE_END)
+  --  e1:SetReset(RESET_PHASE+PHASE_END) không reset.
     e1:SetCondition(s.tdcon)
     e1:SetOperation(s.tdop)
     Duel.RegisterEffect(e1,tp)
-
-
- --   function s.tdfilter(c)
-   --     return c
-    --end
 
 end
 
@@ -63,6 +58,7 @@ function s.tdcon(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
     local g=Duel.GetMatchingGroup(s.tdfilter,tp,LOCATION_SZONE,LOCATION_SZONE,nil)
-    Duel.SetLP(tp,Duel.GetLP(tp)-#g*1000)
-   -- Duel.SendtoDeck(g,nil,0,REASON_EFFECT)
+    Duel.SetLP(tp,Duel.GetLP(tp)-#g*1000) 
+    -- Lose LP
+
 end
