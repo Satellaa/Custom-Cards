@@ -7,7 +7,7 @@ function s.initial_effect(c)
 	e1:SetCategory(CATEGORY_TOGRAVE+CATEGORY_TOHAND+CATEGORY_SEARCH)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e1:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
+	e1:SetProperty(EFFECT_FLAG_DELAY)
 	e1:SetCountLimit(1,id)
 	e1:SetCost(s.addcost)
     e1:SetCondition(s.addcon)
@@ -51,20 +51,14 @@ function s.addcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.RegisterEffect(e1,tp)
     local e2=e1:Clone()
 	e2:SetCode(EFFECT_CANNOT_SUMMON)
-	e2:SetTarget(s.splimit2)
+	e2:SetTarget(s.splimit)
     Duel.RegisterEffect(e2,tp)
 	local e3=e1:Clone()
 	e3:SetCode(EFFECT_CANNOT_FLIP_SUMMON)
-    e3:SetTarget(s.splimit3)
+    e3:SetTarget(s.splimit)
     Duel.RegisterEffect(e3,tp)
 end
 function s.splimit(e,c,sump,sumtype,sumpos,targetp,se)
-	return not c:IsSetCard(0x8)
-end
-function s.splimit2(e,c,sump,sumtype,sumpos,targetp,se)
-	return not c:IsSetCard(0x8)
-end
-function s.splimit3(e,c,sump,sumtype,sumpos,targetp,se)
 	return not c:IsSetCard(0x8)
 end
 function s.addcon(e,tp,eg,ep,ev,re,r,rp)
@@ -79,6 +73,7 @@ end
 function s.addtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.gyfilter,tp,LOCATION_DECK+LOCATION_EXTRA,0,1,nil) end
     Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK+LOCATION_EXTRA)
+    Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
 function s.addop(e,tp,eg,ep,ev,re,r,rp)
 	    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
@@ -87,7 +82,6 @@ function s.addop(e,tp,eg,ep,ev,re,r,rp)
 		and Duel.GetOperatedGroup():GetFirst():IsLocation(LOCATION_GRAVE)
 		and Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil,e,tp)
 		and Duel.SelectYesNo(tp,aux.Stringid(id,2)) then
-		Duel.BreakEffect()
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_ATOHAND)
 		local sg=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp)
 		if #sg>0 then
