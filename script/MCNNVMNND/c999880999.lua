@@ -4,28 +4,28 @@
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
-    Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0xaf),2)
+        Link.AddProcedure(c,aux.FilterBoolFunctionEx(Card.IsSetCard,0xaf),2)
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_DESTROY)
-    e1:SetType(EFFECT_TYPE_QUICK_O)
+        e1:SetType(EFFECT_TYPE_QUICK_O)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
 	e1:SetHintTiming(0,TIMING_CHECK_MONSTER_E+TIMING_PHASE_END)
-    e1:SetCondition(s.descon)
-    e1:SetTarget(s.destg)
-    e1:SetOperation(s.desop)
+        e1:SetCondition(s.descon)
+        e1:SetTarget(s.destg)
+        e1:SetOperation(s.desop)
 	c:RegisterEffect(e1)
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
 	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SPECIAL_SUMMON+CATEGORY_DAMAGE)
-    e2:SetType(EFFECT_TYPE_IGNITION)
+        e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
 	e2:SetCondition(s.thcon)
-    e2:SetTarget(s.thtg)
-    e2:SetOperation(s.thop)
+        e2:SetTarget(s.thtg)
+        e2:SetOperation(s.thop)
 	c:RegisterEffect(e2)
 end
 s.listed_series={0x10af,0xaf,0xae}
@@ -45,14 +45,14 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	local sg=Duel.GetMatchingGroup(s.filter,tp,LOCATION_SZONE,LOCATION_SZONE,nil)
 	if #sg>0 then
 	local ct=Duel.Destroy(sg,REASON_EFFECT)
-    if ct>2 then
-    local send_ct=ct//2
-    local g=Duel.SelectMatchingCard(tp,aux.TRUE,tp,0,LOCATION_MZONE,send_ct,send_ct,nil)
-    if #g>0 then
+        if ct>2 then
+        local send_ct=ct//2
+        local g=Duel.SelectMatchingCard(tp,aux.TRUE,tp,0,LOCATION_MZONE,send_ct,send_ct,nil)
+        if #g>0 then
 	local ct2=Duel.Destroy(g,REASON_EFFECT)
 	if ct2>0 then
 			Duel.BreakEffect()
-            local e1=Effect.CreateEffect(e:GetHandler())
+                        local e1=Effect.CreateEffect(e:GetHandler())
 			e1:SetType(EFFECT_TYPE_SINGLE)
 			e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE)
 			e1:SetRange(LOCATION_MZONE)
@@ -83,7 +83,7 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
   return dg:GetClassCount(Card.GetCode)>=3 end
   local ct=Duel.GetMatchingGroupCount(s.thfilter2,tp,LOCATION_ONFIELD,LOCATION_ONFIELD,0,nil)
 	Duel.SetTargetPlayer(tp)
-    Duel.SetOperationInfo(0,CATEGORY_DAMAGE,0,0,tp,ct*1000)
+        Duel.SetOperationInfo(0,CATEGORY_DAMAGE,0,0,tp,ct*1000)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
