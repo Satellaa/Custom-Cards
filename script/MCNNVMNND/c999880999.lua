@@ -12,14 +12,14 @@ function s.initial_effect(c)
 	e1:SetCode(EVENT_FREE_CHAIN)
 	e1:SetRange(LOCATION_MZONE)
 	e1:SetCountLimit(1,id)
-	e1:SetHintTiming(0,TIMING_END_PHASE)
+	e1:SetHintTiming(0,TIMING_CHECK_MONSTER_E+TIMING_PHASE_END)
     e1:SetCondition(s.descon)
     e1:SetTarget(s.destg)
     e1:SetOperation(s.desop)
 	c:RegisterEffect(e1)
 	local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,1))
-	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SPECIAL_SUMMON)
+	e2:SetCategory(CATEGORY_TOHAND+CATEGORY_SPECIAL_SUMMON+CATEGORY_DAMAGE)
     e2:SetType(EFFECT_TYPE_IGNITION)
 	e2:SetRange(LOCATION_MZONE)
 	e2:SetCountLimit(1,{id,1})
@@ -44,13 +44,13 @@ end
 function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	local sg=Duel.GetMatchingGroup(s.filter,tp,LOCATION_SZONE,LOCATION_SZONE,nil)
 	if #sg>0 then
-		local ct=Duel.Destroy(sg,REASON_EFFECT)
-       if ct>1 then
-       local send_ct=ct//2
-       local g=Duel.SelectMatchingCard(tp,aux.TRUE,tp,0,LOCATION_MZONE,send_ct,send_ct,nil)
+	local ct=Duel.Destroy(sg,REASON_EFFECT)
+    if ct>2 then
+    local send_ct=ct//2
+    local g=Duel.SelectMatchingCard(tp,aux.TRUE,tp,0,LOCATION_MZONE,send_ct,send_ct,nil)
     if #g>0 then
-		local ct2=Duel.Destroy(g,REASON_EFFECT)
-		if ct2>0 then
+	local ct2=Duel.Destroy(g,REASON_EFFECT)
+	if ct2>0 then
 			Duel.BreakEffect()
             local e1=Effect.CreateEffect(e:GetHandler())
 			e1:SetType(EFFECT_TYPE_SINGLE)
@@ -85,6 +85,7 @@ function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetTargetPlayer(tp)
     Duel.SetOperationInfo(0,CATEGORY_DAMAGE,0,0,tp,ct*1000)
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
     if Duel.GetLocationCount(tp,LOCATION_MZONE)<=0 and not e:GetHandler():IsRelateToEffect(e) then return end
@@ -110,11 +111,11 @@ function s.thop(e,tp,eg,ep,ev,re,r,rp)
 		local tc=cg:GetFirst()
 		if tc:IsCanBeSpecialSummoned(e,0,tp,false,false) then
 		Duel.SpecialSummon(tc,0,tp,tp,false,false,POS_FACEUP)
-      else
-Duel.SendtoHand(tc,nil,REASON_EFFECT)
-    end
-sg1:RemoveCard(tc)
-Duel.SendtoGrave(sg1,REASON_EFFECT)
+        else
+        Duel.SendtoHand(tc,nil,REASON_EFFECT)
+        end
+        sg1:RemoveCard(tc)
+        Duel.SendtoGrave(sg1,REASON_EFFECT)
+     end
   end
- end
 end
