@@ -45,7 +45,7 @@ function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	local sg=Duel.GetMatchingGroup(s.filter,tp,LOCATION_SZONE,LOCATION_SZONE,nil)
 	if #sg>0 then
 	local ct=Duel.Destroy(sg,REASON_EFFECT)
-        if ct>2 then
+        if ct>1 then
         local send_ct=ct//2
         local g=Duel.SelectMatchingCard(tp,aux.TRUE,tp,0,LOCATION_MZONE,send_ct,send_ct,nil)
         if #g>0 then
