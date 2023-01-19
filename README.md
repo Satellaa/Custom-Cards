@@ -34,7 +34,7 @@ If you find any BUG in the effects of the cards, please use the ***ISSUE*** tab 
 
 
 
-[df2]: <https://drive.google.com/file/d/1N-Zbb6g6b-L1thwoX-p1TRlx0L0KK58S/view?usp=drivesdk>
+[df2]: <https://drive.google.com/file/d/1XmGA8W3hCUOBWQfFWHE-q_XH791GpTEH/view?usp=drivesdk>
 [img1]: <https://user-images.githubusercontent.com/107518574/205525916-bc2f4be4-5f34-4b0c-ae0a-8211ae40f8ab.jpg>
 [img2]: <https://user-images.githubusercontent.com/107518574/205527563-42a0e83d-a2a9-4861-a0e6-b3c9b5c091a4.jpg>
 [df3]: <https://www.zerotier.com/>
