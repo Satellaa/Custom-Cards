@@ -27,7 +27,7 @@ function s.initial_effect(c)
 	e3:SetOperation(s.remop)
 	c:RegisterEffect(e3,false,REGISTER_FLAG_VADER)
 end
-s.listed_series={0x7CC}
+s.listed_series={SET_STAR_VADER}
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return true end
 	Duel.SetPossibleOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,1-tp,LOCATION_DECK)
@@ -72,7 +72,7 @@ end
 function s.remcon(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	local cont=Duel.GetChainInfo(0,CHAININFO_TRIGGERING_CONTROLER)
-	return re:IsActiveType(TYPE_MONSTER) and rc:IsSetCard(0x7CC) and rc:GetRank()>=8 or rc:IsLevelAbove(8) and cont==tp
+	return re:IsActiveType(TYPE_MONSTER) and rc:IsSetCard(SET_STAR_VADER) and rc:GetRank()>=8 or rc:IsLevelAbove(8) and cont==tp
 end
 function s.remcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToGraveAsCost() end

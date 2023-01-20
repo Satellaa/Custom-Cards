@@ -29,7 +29,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_names={888888881}
-s.listed_series={0x7CC}
+s.listed_series={SET_STAR_VADER}
 function s.sumfilter(c)
 	return c:IsRace(RACE_MACHINE) and c:IsAttribute(ATTRIBUTE_DARK)
 end

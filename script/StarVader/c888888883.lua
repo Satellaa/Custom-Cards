@@ -28,7 +28,7 @@ function s.initial_effect(c)
 	e3:SetOperation(s.remop)
 	c:RegisterEffect(e3,false,REGISTER_FLAG_VADER)
 end
-s.listed_series={0x7CC}
+s.listed_series={SET_STAR_VADER}
 function s.costfilter(c)
 	return c:IsRace(RACE_MACHINE) and c:IsAttribute(ATTRIBUTE_DARK) and c:IsDiscardable()
 end
@@ -37,7 +37,7 @@ function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.DiscardHand(tp,s.costfilter,1,1,REASON_COST+REASON_DISCARD,nil)
 end
 function s.thfilter(c)
-	return c:IsSetCard(0x7CC) and c:IsMonster() and c:IsAbleToHand()
+	return c:IsSetCard(SET_STAR_VADER) and c:IsMonster() and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_DECK,0,1,nil) end
@@ -54,7 +54,7 @@ end
 function s.remcon(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	local cont=Duel.GetChainInfo(0,CHAININFO_TRIGGERING_CONTROLER)
-	return re:IsActiveType(TYPE_MONSTER) and rc:IsSetCard(0x7CC) and rc:GetRank()>=8 or rc:IsLevelAbove(8) and cont==tp
+	return re:IsActiveType(TYPE_MONSTER) and rc:IsSetCard(SET_STAR_VADER) and rc:GetRank()>=8 or rc:IsLevelAbove(8) and cont==tp
 end
 function s.remcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return e:GetHandler():IsAbleToGraveAsCost() end

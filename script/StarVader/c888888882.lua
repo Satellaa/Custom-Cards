@@ -25,9 +25,9 @@ function s.initial_effect(c)
 	e2:SetOperation(s.spop2)
 	c:RegisterEffect(e2)
 end
-s.listed_series={0x7CC}
+s.listed_series={SET_STAR_VADER}
 function s.ovfilter(c,tp,xyzc)
-   return c:IsFaceup() and c:IsLevelAbove(8) and c:IsSetCard(0x7CC,xyzc,SUMMON_TYPE_XYZ,tp) and (Duel.GetCurrentPhase()==PHASE_MAIN1 or PHASE_MAIN2) and not Duel.CheckPhaseActivity()
+   return c:IsFaceup() and c:IsLevelAbove(8) and c:IsSetCard(SET_STAR_VADER,xyzc,SUMMON_TYPE_XYZ,tp) and (Duel.GetCurrentPhase()==PHASE_MAIN1 or PHASE_MAIN2) and not Duel.CheckPhaseActivity()
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsSummonType(SUMMON_TYPE_XYZ)
@@ -72,7 +72,7 @@ end
 Duel.Remove(g,POS_FACEUP,REASON_EFFECT+REASON_REVEAL)
 end
 function s.spfilter(c,e,tp)
-	return c:IsSetCard(0x7CC) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+	return c:IsSetCard(SET_STAR_VADER) and c:IsMonster() and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
 end
 function s.sptg2(e,tp,eg,ep,ev,re,r,rp,chk)
     if chk==0 then return e:GetHandler():IsAbleToRemove() and Duel.GetLocationCount(tp,LOCATION_MZONE)>1
