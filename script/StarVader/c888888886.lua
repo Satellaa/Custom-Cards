@@ -34,7 +34,7 @@ function s.initial_effect(c)
 	e4:SetCode(EVENT_REMOVE)
 	c:RegisterEffect(e4)
 end
-s.listed_series={SET_STAR_VADER}
+s.listed_series={0xf12}
 s.listed_names={id}
 function s.sumfilter(c)
 	return c:IsRace(RACE_MACHINE) and c:IsAttribute(ATTRIBUTE_DARK)

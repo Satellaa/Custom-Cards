@@ -28,7 +28,7 @@ function s.initial_effect(c)
 	e4:SetCode(EVENT_REMOVE)
 	c:RegisterEffect(e4)
 end
-s.listed_series={SET_STAR_VADER}
+s.listed_series={0xf12}
 function s.remtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chkc then return chkc:IsControler(1-tp) and chkc:IsOnField() end
 	if chk==0 then return Duel.IsExistingTarget(aux.TRUE,tp,0,LOCATION_ONFIELD,1,nil) end

@@ -54,7 +54,7 @@ function s.initial_effect(c)
 	Duel.RegisterEffect(ge1,0)
   end)
 end
-s.listed_series={SET_STAR_VADER}
+s.listed_series={0xf12}
 function s.cfilter(c,p)
 	return c:IsPreviousControler(p) and c:IsPreviousLocation(LOCATION_MZONE) and c:IsFaceup() and c:IsMonster()
 end
@@ -67,7 +67,7 @@ function s.checkop(e,tp,eg,ep,ev,re,r,rp)
 	end
 end
 function s.splimit(e,se,sp,st)
-	return se:GetHandler():IsSetCard(SET_STAR_VADER)
+	return se:GetHandler():IsSetCard(0xf12)
 end
 function s.spcon(e,tp,eg,ep,ev,re,r,rp)
 	return Duel.GetFlagEffect(tp,id)>=2 and Duel.IsMainPhase()
