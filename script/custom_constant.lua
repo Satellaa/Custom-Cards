@@ -1,3 +1,9 @@
+-- Custom archetype setcode constants
+SET_ZODIAC = f11
+SET_STAR_VADER = f12
+SET_STARRYTAIL = f13
+
+
 function Auxiliary.BitSplit(v)
 	local res={}
 	local i=0
