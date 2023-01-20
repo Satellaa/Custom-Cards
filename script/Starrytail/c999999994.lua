@@ -25,9 +25,9 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_names={44221928}
-s.listed_series={0x7d6}
+s.listed_series={0xf13}
 function s.drwfilter(c)
-	return c:IsSetCard(0x7d6) and c:IsMonster() and c:IsDiscardable(REASON_EFFECT)
+	return c:IsSetCard(0xf13) and c:IsMonster() and c:IsDiscardable(REASON_EFFECT)
 end
 function s.drwcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return not e:GetHandler():IsPublic() end
@@ -49,7 +49,7 @@ function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsReason(REASON_EFFECT)
 end
 function s.srchfilter(c)
-	return c:IsSetCard(0x7d6) and c:IsAbleToHand()
+	return c:IsSetCard(0xf13) and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.srchfilter,tp,LOCATION_DECK,0,1,nil) end

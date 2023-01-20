@@ -25,13 +25,13 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_names={37626500}
-s.listed_series={0x7d6}
+s.listed_series={0xf13}
 function s.cfilter(c)
 	return c:IsRitualSpell() and c:IsDiscardable(REASON_EFFECT)
 end
 function s.spfilter(c,e,tp)
 	local pg=aux.GetMustBeMaterialGroup(tp,Group.CreateGroup(),tp,c,nil,REASON_RITUAL)
-	return #pg<=0 and c:IsSetCard(0x7d6) and c:IsRitualMonster()
+	return #pg<=0 and c:IsSetCard(0xf13) and c:IsRitualMonster()
 		and c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_RITUAL,tp,true,false,POS_FACEUP)
 end
 function s.sptg(e,tp,eg,ep,ev,re,r,rp,chk)

@@ -13,12 +13,12 @@ local e1=Effect.CreateEffect(c)
 	e1:SetOperation(s.activate)
 	c:RegisterEffect(e1)
 end
-s.listed_series={0x7d6}
+s.listed_series={0xf13}
 function s.cfilter(c,tp)
 	return c:IsRitualMonster() and c:IsLevel(4) and not c:IsPublic() and Duel.IsExistingMatchingCard(s.cfilter2,tp,LOCATION_DECK+LOCATION_GRAVE,0,1,nil,c,tp)
 end
 function s.cfilter2(c,rm,tp)
-  return c:IsRitualSpell() and c:IsAbleToHand() and (c:IsSetCard(0x7d6) or Card.ListsCode(rm,c:GetCode()))
+  return c:IsRitualSpell() and c:IsAbleToHand() and (c:IsSetCard(0xf13) or Card.ListsCode(rm,c:GetCode()))
 end
 function s.cost(e,tp,eg,ep,ev,re,r,rp,chk)
 	e:SetLabel(1)

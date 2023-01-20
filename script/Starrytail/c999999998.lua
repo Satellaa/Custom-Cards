@@ -27,7 +27,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_names={59820352}
-s.listed_series={0x7d6}
+s.listed_series={0xf13}
 function s.negcon(e,tp,eg,ep,ev,re,r,rp)
 local loc=Duel.GetChainInfo(ev,CHAININFO_TRIGGERING_LOCATION)
 	return (loc&LOCATION_ONFIELD)~=0 and not e:GetHandler():IsStatus(STATUS_CHAINING)

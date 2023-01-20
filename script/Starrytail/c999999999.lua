@@ -26,7 +26,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_names={59820352}
-s.listed_series={0x7d6}
+s.listed_series={0xf13}
 function s.spfilter(c,e,tp)
 	local pg=aux.GetMustBeMaterialGroup(tp,Group.CreateGroup(),tp,c,nil,REASON_RITUAL)
 	return #pg<=0 and c:IsLevel(4) and c:IsRitualMonster()

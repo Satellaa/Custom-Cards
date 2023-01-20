@@ -24,7 +24,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_names={37626500}
-s.listed_series={0x7d6}
+s.listed_series={0xf13}
 function s.tgfilter(c)
 	return c:IsRitualMonster() and c:IsAbleToGrave()
 end
@@ -52,7 +52,7 @@ function s.thcon(e,tp,eg,ep,ev,re,r,rp)
 	return e:GetHandler():IsReason(REASON_EFFECT)
 end
 function s.thfilter(c)
-	return c:IsSetCard(0x7d6) and c:IsRitualMonster() and c:IsAbleToHand()
+	return c:IsSetCard(0xf13) and c:IsRitualMonster() and c:IsAbleToHand()
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_GRAVE,0,1,e:GetHandler()) end

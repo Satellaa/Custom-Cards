@@ -2,7 +2,7 @@
 --Scripted by Lilac-chan
 local s,id=GetID()
 function s.initial_effect(c)
-	Ritual.AddProcEqual(c,aux.FilterBoolFunction(Card.IsSetCard,0x7d6))
+	Ritual.AddProcEqual(c,aux.FilterBoolFunction(Card.IsSetCard,0xf13))
     local e1=Effect.CreateEffect(c)
 	e1:SetCategory(CATEGORY_TOHAND)
 	e1:SetType(EFFECT_TYPE_IGNITION)
@@ -13,7 +13,7 @@ function s.initial_effect(c)
 	e1:SetOperation(s.thop)
 	c:RegisterEffect(e1)
 end
-s.listed_series={0x7d6}
+s.listed_series={0xf13}
 function s.thfilter(c)
 	return c:IsRitualSpell() and c:IsAbleToHand()
 end

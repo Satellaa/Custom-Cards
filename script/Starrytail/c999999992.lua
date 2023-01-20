@@ -27,7 +27,7 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_names={69035382}
-s.listed_series={0x7d6}
+s.listed_series={0xf13}
 function s.cfilter(c)
 	return c:IsRitualMonster() and c:IsDiscardable(REASON_EFFECT)
 end
@@ -73,7 +73,7 @@ end
 function s.rcon(e,tp,eg,ep,ev,re,r,rp)
 	if not re then return false end
 	local rc=re:GetHandler()
-    return e:GetHandler():IsReason(REASON_EFFECT) and rc:IsSetCard(0x7d6)
+    return e:GetHandler():IsReason(REASON_EFFECT) and rc:IsSetCard(0xf13)
 end
 function s.rfilter(c)
 	return c:IsFacedown() and c:IsAbleToHand()

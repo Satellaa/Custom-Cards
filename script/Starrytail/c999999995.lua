@@ -32,9 +32,9 @@ function s.initial_effect(c)
 	c:RegisterEffect(e2)
 end
 s.listed_names={69035382}
-s.listed_series={0x7d6}
+s.listed_series={0xf13}
 function s.atkfilter(c)
-	return c:IsFaceup() and c:IsType(TYPE_RITUAL) and c:IsSetCard(0x7d6)
+	return c:IsFaceup() and c:IsType(TYPE_RITUAL) and c:IsSetCard(0xf13)
 end
 function s.atkval(e,c)
 	return Duel.GetMatchingGroupCount(s.atkfilter,0,LOCATION_MZONE,LOCATION_MZONE,nil)*500
