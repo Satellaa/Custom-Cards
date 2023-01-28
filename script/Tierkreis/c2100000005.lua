@@ -51,7 +51,7 @@ function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_GRAVE)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
+	Duel.Hint(HINT_SELECTMSG,tp,aux.Stringid(id,3))
 	local sg=Duel.SelectMatchingCard(tp,s.tdfilter,tp,LOCATION_GRAVE,0,1,1,nil)
 	if #sg>0 and Duel.SendtoDeck(sg,nil,SEQ_DECKTOP,REASON_EFFECT)~=0 then
 		local attcheck=e:GetLabelObject()
