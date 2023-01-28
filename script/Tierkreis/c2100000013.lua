@@ -106,7 +106,7 @@ function s.clear(e,tp,eg,ep,ev,re,r,rp)
 end
 function s.drwtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local ct=s[1-tp]
-	local dct=math.floor(ct/1000)
+	local dct=math.floor(ct/500)
 	if chk==0 then return dct>0 and Duel.IsPlayerCanDraw(tp,dct) end
 	Duel.SetTargetPlayer(tp)
 	Duel.SetTargetParam(dct)
@@ -115,5 +115,5 @@ end
 function s.drwop(e,tp,eg,ep,ev,re,r,rp)
 	local ct=s[1-tp]
 	local p=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER)
-	Duel.Draw(p,math.floor(ct/1000),REASON_EFFECT)
+	Duel.Draw(p,math.floor(ct/500),REASON_EFFECT)
 end
