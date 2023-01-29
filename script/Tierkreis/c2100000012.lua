@@ -54,11 +54,11 @@ function s.drwcostfiler(c)
 	return c:IsSetCard(0xf11) and c:IsDiscardable()
 end
 function s.drwcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.drwcostfiler,tp,LOCATION_HAND,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(s.drwcostfiler,tp,LOCATION_HAND,0,1,e:GetHandler()) end
 	Duel.DiscardHand(tp,s.drwcostfiler,1,1,REASON_COST+REASON_DISCARD,nil)
 end
 function s.drwtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) and Duel.IsExistingMatchingCard(s.drwcostfiler,tp,LOCATION_HAND,0,1,nil) end
+	if chk==0 then return Duel.IsPlayerCanDraw(tp,1) end
 	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 	Duel.SetTargetPlayer(tp)
 	Duel.SetTargetParam(1)
@@ -70,7 +70,7 @@ function s.drwop(e,tp,eg,ep,ev,re,r,rp)
 end
 -- Effect 2
 function s.damtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.drwcostfiler,tp,LOCATION_HAND,0,1,nil) end
+	if chk==0 then return true end
 	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
 	Duel.SetTargetPlayer(1-tp)
 	Duel.SetTargetParam(500)
@@ -85,7 +85,7 @@ function s.tdfilter(c)
 	return c:IsSetCard(0xf11) and not c:IsCode(id) and c:IsAbleToDeck()
 end
 function s.tdtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.tdfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil) and Duel.IsExistingMatchingCard(s.drwcostfiler,tp,LOCATION_HAND,0,1,nil) end
+	if chk==0 then return Duel.IsExistingMatchingCard(s.tdfilter,tp,LOCATION_GRAVE+LOCATION_REMOVED,0,1,nil) end
 	Duel.SetOperationInfo(0,CATEGORY_TODECK,nil,1,tp,LOCATION_GRAVE+LOCATION_REMOVED)
 end
 function s.tdop(e,tp,eg,ep,ev,re,r,rp)
