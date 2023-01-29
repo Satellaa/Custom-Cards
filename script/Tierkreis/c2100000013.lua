@@ -64,7 +64,7 @@ s.listed_series={0xf11}
 function s.checkop(e,tp,eg,ep,ev,re,r,rp)
     local c=re:GetHandler()
 	if c:IsMonster() then
-		c:RegisterFlagEffect(id,RESET_PHASE+PHASE_END,0,1)
+		c:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
 	end
 end
 function s.atkcon(e)
