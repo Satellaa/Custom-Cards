@@ -1,4 +1,4 @@
--- Zodic Kriel
+-- Tierkreis Kriel
 -- Scripted by Lilac
 local s,id=GetID()
 function s.initial_effect(c)
