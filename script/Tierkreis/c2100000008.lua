@@ -2,7 +2,7 @@
 -- Scripted by Lilac
 local s,id=GetID()
 function s.initial_effect(c)
-    -- Destroy 1 Normal Summoned monster
+    -- Banish 1 Normal Summoned monster
 	local e1=Effect.CreateEffect(c)
 	e1:SetDescription(aux.Stringid(id,0))
 	e1:SetCategory(CATEGORY_DAMAGE+CATEGORY_DESTROY)
@@ -55,7 +55,7 @@ end
 function s.desop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc and tc:IsRelateToEffect(e) then
-		if Duel.Destroy(tc,REASON_EFFECT)==0 then return end
+	  if Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)==0 then return end
 	local attcheck=e:GetLabelObject()
 	if attcheck:IsAttribute(ATTRIBUTE_FIRE) and attcheck:IsSetCard(0xf11) then
 		Duel.BreakEffect()
