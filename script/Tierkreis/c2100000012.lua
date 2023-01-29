@@ -40,7 +40,7 @@ function s.initial_effect(c)
 	e4:SetOperation(s.revop)
 	c:RegisterEffect(e4)
 	-- Act in hand during opponent's turn
-	local e5=Effect.CreateEffect(c)
+	local e5=e1:Clone()
 	e5:SetDescription(aux.Stringid(id,6))
 	e5:SetType(EFFECT_TYPE_SINGLE)
 	e5:SetCode(EFFECT_QP_ACT_IN_NTPHAND)
