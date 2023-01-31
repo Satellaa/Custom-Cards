@@ -1,5 +1,6 @@
--- Madolche Bonneterrine
--- Scripted by Satella
+-- ノーブルマドルチェ・ファッジライン
+-- Madolche Noble Fudgelein
+-- Scripted by Lilac-chan
 local s,id=GetID()
 function s.initial_effect(c)
 -- Link Summon
@@ -22,7 +23,7 @@ c:EnableReviveLimit()
 	e2:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_TRIGGER_O)
 	e2:SetProperty(EFFECT_FLAG_DELAY+EFFECT_FLAG_DAMAGE_STEP)
 	e2:SetCode(EVENT_SPSUMMON_SUCCESS)
-	e2:SetCountLimit(1,{id,1})
+	e2:SetCountLimit(1,id+1)
 	e2:SetLabel(0)
 	e2:SetCondition(s.regcon)
 	e2:SetTarget(s.regtg)
@@ -63,16 +64,27 @@ end
 function s.sfilter2(c,e,tp)
 	return c:IsSetCard(0x71) and c:IsCanBeSpecialSummoned(e,0,tp,false,false,POS_FACEUP)
 end
+function s.tdfilter(c,e,tp)
+	return c:IsSetCard(0x71) and c:IsMonster() and c:IsAbleToGrave()
+		and Duel.IsExistingMatchingCard(s.spfilter2,tp,LOCATION_DECK,0,1,nil,e,tp,c:GetRace())
+end
+function s.spfilter2(c,e,tp,race)
+	return c:IsSetCard(0x71) and not c:IsRace(race) and c:IsCanBeSpecialSummoned(e,0,tp,false,false)
+end
 function s.regtg(e,tp,eg,ep,ev,re,r,rp,chk)
 	local effs=e:GetLabel()
 	if chk==0 then
-		return ((effs&1)==0 or Duel.IsExistingMatchingCard(s.sfilter,tp,LOCATION_DECK,0,1,nil)) and
-		            ((effs&(1<<1))==0 or Duel.IsExistingMatchingCard(s.sfilter2,tp,LOCATION_GRAVE,0,1,nil,e,tp))
+    return ((effs&1)==0 or Duel.IsExistingMatchingCard(s.sfilter,tp,LOCATION_DECK,0,1,nil)) and
+		            ((effs&(1<<1))==0 or Duel.IsExistingMatchingCard(s.sfilter2,tp,LOCATION_GRAVE|LOCATION_REMOVED,0,1,nil,e,tp)) and ((effs&(1<<2))==0 or Duel.GetLocationCount(tp,LOCATION_MZONE)>0
+		and Duel.IsExistingMatchingCard(s.tdfilter,tp,LOCATION_DECK,0,1,nil,e,tp)) end
+    local cat=0
+    if (effs&1)~=0 then
+	  cat=CATEGORY_TOHAND+CATEGORY_SEARCH
+      Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
 end
-	    if (effs&1)~=0 then
-	    Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_DECK)
+    Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,nil,1,tp,LOCATION_DECK)
+	Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,LOCATION_DECK)
    end
-end
 function s.regop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
 	local effs=e:GetLabel()
@@ -88,11 +100,24 @@ function s.regop(e,tp,eg,ep,ev,re,r,rp)
 --Level 4: Special Summon 1 "Madolche" monster from your GY.
 	if (effs&(1<<1))~=0 then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.sfilter2),tp,LOCATION_GRAVE,0,1,1,nil,e,tp)
+	local g=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.sfilter2),tp,LOCATION_GRAVE|LOCATION_REMOVED,0,1,1,nil,e,tp)
 	if #g>0 then
 		Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
 		end
    end
+   if (effs&(1<<2))~=0 then
+   Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TOGRAVE)
+	local tc=Duel.SelectMatchingCard(tp,s.tdfilter,tp,LOCATION_DECK,0,1,1,nil,e,tp):GetFirst()
+	if tc then
+		if Duel.SendtoGrave(tc,tp,2,REASON_EFFECT)~=0 and Duel.GetLocationCount(tp,LOCATION_MZONE)>0 then
+			Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
+			local g=Duel.SelectMatchingCard(tp,s.spfilter2,tp,LOCATION_DECK,0,1,1,nil,e,tp,tc:GetRace())
+			if #g>0 then
+           Duel.SpecialSummon(g,0,tp,tp,false,false,POS_FACEUP)
+     end
+   end
+  end
+ end
 end
 function s.valcheck(e,c)
 	local g=c:GetMaterial()
@@ -101,5 +126,7 @@ function s.valcheck(e,c)
 	if g:IsExists(Card.IsLevel,1,nil,3) then effs=1 end
 	--Check Level 4
 	if g:IsExists(Card.IsLevel,1,nil,4) then effs=effs|(1<<1) end
-	e:GetLabelObject():SetLabel(effs)
+	--Check Level 5
+    if g:IsExists(Card.IsLevel,1,nil,5) then effs=effs|(1<<2) end
+    e:GetLabelObject():SetLabel(effs)
  end
