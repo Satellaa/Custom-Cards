@@ -33,7 +33,7 @@ function s.initial_effect(c)
 		Duel.RegisterEffect(ge1,0)
 	end)
 end
-s.listed_series={SET_SKY_STRIKER}
+s.listed_series={SET_SKY_STRIKER,SET_SKY_STRIKER_ACE}
 function s.checkop(e,tp,eg,ep,ev,re,r,rp)
 	local rc=re:GetHandler()
 	if rc:IsSetCard(SET_SKY_STRIKER) then
