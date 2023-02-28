@@ -46,7 +46,9 @@ function s.decost(e,tp,eg,ep,ev,re,r,rp,chk)
 	if chk==0 then return not e:GetHandler():IsPublic() end
 end
 function s.detg(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return Duel.IsExistingMatchingCard(s.defilter,tp,LOCATION_HAND,0,1,nil) end
+	if chk==0 then return Duel.GetFieldGroupCount(tp,LOCATION_MZONE,LOCATION_MZONE)>0 and Duel.IsExistingMatchingCard(s.defilter,tp,LOCATION_HAND,0,1,nil) end
+	local g=Duel.GetMatchingGroup(Card.IsDestructable,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
+	Duel.SetOperationInfo(0,CATEGORY_DESTROY,g,1,0,0)
 	Duel.SetOperationInfo(0,CATEGORY_HANDES,nil,0,tp,2)
 end
 function s.deop(e,tp,eg,ep,ev,re,r,rp)
