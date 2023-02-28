@@ -1,5 +1,6 @@
--- Exorsister Elaphia
--- Scrpited by Satella
+-- エクソシスター・イレフィア
+-- Exosister Elaphia
+-- Scrpited by Lilac-chan
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()
@@ -19,29 +20,31 @@ function s.initial_effect(c)
 	e1:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
 	e1:SetValue(s.indval)
 	c:RegisterEffect(e1)
-    -- Target Destroy 
+    -- Banish
     local e2=Effect.CreateEffect(c)
 	e2:SetDescription(aux.Stringid(id,0))
-	e2:SetCategory(CATEGORY_DESTROY)
-	e2:SetProperty(EFFECT_FLAG_CARD_TARGET)
+	e2:SetCategory(CATEGORY_REMOVE)
 	e2:SetType(EFFECT_TYPE_QUICK_O)
 	e2:SetCode(EVENT_FREE_CHAIN)
 	e2:SetRange(LOCATION_MZONE)
+	e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E+TIMING_MAIN_END)
 	e2:SetCountLimit(1,id)
-	e2:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E)
-    e2:SetCondition(function(e) return e:GetHandler():GetFlagEffect(id)>0 end)
-	e2:SetTarget(s.tm)
-	e2:SetOperation(s.dm)
+	e2:SetCondition(function(e) return e:GetHandler():GetFlagEffect(id)>0 end)
+    e2:SetTarget(s.rmtg)
+	e2:SetOperation(s.rmop)
 	c:RegisterEffect(e2)
-    -- Cannot be destroyed
+    -- Take control
     local e3=Effect.CreateEffect(c)
+	e3:SetCategory(CATEGORY_CONTROL)
 	e3:SetDescription(aux.Stringid(id,1))
 	e3:SetType(EFFECT_TYPE_IGNITION)
+	e3:SetProperty(EFFECT_FLAG_CARD_TARGET)
 	e3:SetRange(LOCATION_MZONE)
-	e3:SetCountLimit(1,{id,1})
-	e3:SetCost(s.thcost)
-	e3:SetOperation(s.thop)
-	c:RegisterEffect(e3,false,REGISTER_FLAG_DETACH_XMAT)
+	e3:SetCountLimit(1,id+1)
+	e3:SetCost(aux.dxmcostgen(1,1,nil))
+	e3:SetTarget(s.taketg)
+    e3:SetOperation(s.takeop)
+	c:RegisterEffect(e3)
 end
 s.listed_series={0x174}
 function s.valcheck(e,c)
@@ -56,38 +59,83 @@ function s.indval(e,re,rp)
 	return rc:IsSummonType(SUMMON_TYPE_SPECIAL) and rc:IsSummonLocation(LOCATION_GRAVE)
 		and re:IsActiveType(TYPE_MONSTER) and re:IsActivated()
 end
-function s.tm(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
-	local c=e:GetHandler()
-	if chkc then return chkc:IsOnField() and chkc:IsControler(1-tp) and chkc:IsType(TYPE_SPELL+TYPE_TRAP) end
-	if chk==0 then return Duel.IsExistingTarget(Card.IsType,tp,0,LOCATION_ONFIELD,1,nil,TYPE_SPELL+TYPE_TRAP) end
-	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_DESTROY)
-	local tg=Duel.SelectTarget(tp,Card.IsType,tp,0,LOCATION_ONFIELD,1,1,nil,TYPE_SPELL+TYPE_TRAP)
+function s.rmtg(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return Duel.GetFieldGroupCount(tp,0,LOCATION_DECK)>0 and Duel.IsPlayerCanRemove(tp) end
 	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
-	Duel.SetOperationInfo(0,CATEGORY_DESTROY,tg,1,0,0)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+    Duel.SetOperationInfo(0,CATEGORY_REMOVE,nil,1,1-tp,LOCATION_DECK)
 end
-function s.dm(e,tp,eg,ep,ev,re,r,rp)
+function s.rmop(e,tp,eg,ep,ev,re,r,rp)
+	local g=Duel.GetFieldGroup(tp,0,LOCATION_DECK)
+	if #g<1 then return end
+	Duel.ConfirmCards(tp,g)
+	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_REMOVE)
+	local sg=g:FilterSelect(tp,Card.IsAbleToRemove,1,1,nil,tp,POS_FACEUP)
+	if #sg>0 and Duel.Remove(sg,POS_FACEUP,REASON_EFFECT)>0 then
+	local tc=Duel.GetOperatedGroup():GetFirst()
+		if tc:IsLocation(LOCATION_REMOVED) then
+			local e1=Effect.CreateEffect(e:GetHandler())
+			e1:SetDescription(aux.Stringid(id,3))
+			e1:SetType(EFFECT_TYPE_FIELD)
+			e1:SetProperty(EFFECT_FLAG_PLAYER_TARGET+EFFECT_FLAG_CLIENT_HINT)
+			e1:SetCode(EFFECT_CANNOT_ACTIVATE)
+			e1:SetTargetRange(0,1)
+			e1:SetValue(s.aclimit)
+			e1:SetLabel(tc:GetOriginalCode())
+			e1:SetReset(RESET_PHASE+PHASE_END)
+			Duel.RegisterEffect(e1,tp)
+		end
+	Duel.ShuffleDeck(1-tp)
+  end
+end
+function s.aclimit(e,re,tp)
+	return re:GetHandler():GetOriginalCode()==e:GetLabel()
+end
+function s.takefilter(c)
+	return c:IsFaceup() and c:IsControlerCanBeChanged()
+end
+function s.taketg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
+	if chkc then return chkc:GetLocation()==LOCATION_MZONE and chkc:IsControler(1-tp) and s.takefilter(chkc) end
+	if chk==0 then return Duel.IsExistingTarget(s.takefilter,tp,0,LOCATION_MZONE,1,nil) end
+	Duel.Hint(HINT_OPSELECTED,1-tp,e:GetDescription())
+    Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_CONTROL)
+	local g=Duel.SelectTarget(tp,s.takefilter,tp,0,LOCATION_MZONE,1,1,nil)
+	Duel.SetOperationInfo(0,CATEGORY_CONTROL,g,1,0,0)
+end
+function s.takeop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
-	if tc and tc:IsRelateToEffect(e) then
-		Duel.Destroy(tc,REASON_EFFECT)
-	end
+	if tc and tc:IsRelateToEffect(e) and Duel.GetControl(tc,tp)~=0 then
+	local c=e:GetHandler()
+		tc:RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,2)
+			for _,eff in ipairs({tc:GetCardEffect(EFFECT_SET_CONTROL)}) do
+				if eff:GetOwner()==c then
+					eff:SetReset((eff:GetReset())|RESET_TEMP_REMOVE)
+				end
+			end
+			local e1=Effect.CreateEffect(c)
+			e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+			e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+			e1:SetCode(EVENT_PHASE+PHASE_END)
+			e1:SetCondition(s.removecon)
+			e1:SetOperation(s.removeop)
+			e1:SetReset(RESET_PHASE+PHASE_END,2)
+			e1:SetCountLimit(1)
+			e1:SetLabel(Duel.GetTurnCount())
+			e1:SetLabelObject(tc)
+			Duel.RegisterEffect(e1,tp)
+			local e1=Effect.CreateEffect(c)
+		    e1:SetDescription(3302)
+		    e1:SetProperty(EFFECT_FLAG_CLIENT_HINT)
+		    e1:SetType(EFFECT_TYPE_SINGLE)
+		    e1:SetCode(EFFECT_CANNOT_TRIGGER)
+		    tc:RegisterEffect(e1)
+		end
 end
-function s.thcost(e,tp,eg,ep,ev,re,r,rp,chk)
-	if chk==0 then return e:GetHandler():CheckRemoveOverlayCard(tp,1,REASON_COST) end
-	e:GetHandler():RemoveOverlayCard(tp,1,1,REASON_COST)
+function s.removecon(e,tp,eg,ep,ev,re,r,rp)
+	local tc=e:GetLabelObject()
+	return Duel.GetTurnCount()~=e:GetLabel() and tc:GetFlagEffect(id)~=0
 end
-function s.thop(e,tp,eg,ep,ev,re,r,rp)
-	local e1=Effect.CreateEffect(e:GetHandler())
-	e1:SetType(EFFECT_TYPE_FIELD)
-	e1:SetCode(EFFECT_INDESTRUCTABLE_BATTLE)
-	e1:SetTargetRange(LOCATION_MZONE,0)
-	e1:SetTarget(s.etarget)
-	e1:SetValue(1)
-	e1:SetReset(RESET_PHASE+PHASE_END)
-	Duel.RegisterEffect(e1,tp)
-	local e2=e1:Clone()
-	e2:SetCode(EFFECT_INDESTRUCTABLE_EFFECT)
-	Duel.RegisterEffect(e2,tp)
-end
-function s.etarget(e,c)
-	return c:IsFaceup() and c:IsSetCard(0x174)
+function s.removeop(e,tp,eg,ep,ev,re,r,rp)
+	local tc=e:GetLabelObject()
+	Duel.Remove(tc,POS_FACEUP,REASON_EFFECT)
 end
