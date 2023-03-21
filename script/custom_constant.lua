@@ -29,3 +29,27 @@ function Auxiliary.GetTypeStrings(v)
 	end
 	return pairs(res)
 end
+
+local Azurist={}
+function Azurist.registerflag(id)
+	return function(e,tp,eg,ep,ev,re,r,rp)
+		e:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
+ end
+end
+function Auxiliary.CreateAzuristRestriction(c,id)
+	-- Cannot be material
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e1:SetCode(EVENT_SPSUMMON_SUCCESS)
+	e1:SetOperation(Azurist.registerflag(id))
+	c:RegisterEffect(e1)
+	local e2=Effect.CreateEffect(c)
+	e2:SetType(EFFECT_TYPE_SINGLE)
+	e2:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e2:SetCode(EFFECT_CANNOT_BE_MATERIAL)
+	e2:SetCondition(function(e) return e:GetHandler():GetFlagEffect(id)>0 end)
+	e2:SetValue(1)
+	c:RegisterEffect(e2)
+	return e1 and e2
+end
