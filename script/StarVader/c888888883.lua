@@ -26,7 +26,7 @@ function s.initial_effect(c)
 	e3:SetCost(s.remcost)
     	e3:SetTarget(s.remtg)
 	e3:SetOperation(s.remop)
-	c:RegisterEffect(e3,false,REGISTER_FLAG_VADER)
+	c:RegisterEffect(e3)
 end
 s.listed_series={0xf12}
 function s.costfilter(c)
