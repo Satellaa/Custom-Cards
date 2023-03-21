@@ -36,7 +36,7 @@ function Azurist.registerflag(id)
 		e:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,EFFECT_FLAG_CLIENT_HINT,0,1,3399)
  end
 end
-function Auxiliary.CreateAzuristRestriction(c)
+function Auxiliary.CreateAzuristRestriction(c,id)
 	-- Cannot be material
 	local e1=Effect.CreateEffect(c)
 	e1:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
