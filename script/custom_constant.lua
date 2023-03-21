@@ -33,7 +33,7 @@ end
 local Azurist={}
 function Azurist.registerflag(id)
 	return function(e,tp,eg,ep,ev,re,r,rp)
-		e:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
+		e:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,EFFECT_FLAG_CLIENT_HINT,0,1,3399)
  end
 end
 function Auxiliary.CreateAzuristRestriction(c,id)
