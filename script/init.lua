@@ -34,8 +34,8 @@ local Azurist={}
 function Azurist.registerflag(id)
 	return function(e,tp,eg,ep,ev,re,r,rp)
 		e:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,0,1)
+ end
 end
-
 function Auxiliary.CreateAzuristRestriction(c,id)
 	-- Cannot be material
 	local e1=Effect.CreateEffect(c)
@@ -51,5 +51,5 @@ function Auxiliary.CreateAzuristRestriction(c,id)
 	e2:SetCondition(function(e) return e:GetHandler():GetFlagEffect(id)>0 end)
 	e2:SetValue(1)
 	c:RegisterEffect(e2)
-	return e1,e2
+	return e1 and e2
 end
