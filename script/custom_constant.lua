@@ -64,7 +64,7 @@ function Auxiliary.CreateAzuristRestriction(c,id)
 	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
 	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e3:SetCondition(function(e) return e:GetHandler():GetFlagEffect(2100000027)>0 end)
-	e3:SetOperation(Azurist.resetflag(id)
+	e3:SetOperation(Azurist.resetflag(id))
 	c:RegisterEffect(e3)
 	return e1 and e2 and e3
 end
