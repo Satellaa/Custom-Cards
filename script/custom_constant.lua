@@ -38,7 +38,12 @@ local Azurist={}
 function Azurist.registerflag(id)
 	return function(e,tp,eg,ep,ev,re,r,rp)
 		e:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,EFFECT_FLAG_CLIENT_HINT,0,1,3399)
- end
+	end
+end
+function Azurist.registerflag(id)
+	return function(e,tp,eg,ep,ev,re,r,rp)
+		e:GetHandler():ResetFlagEffect(id)
+	end
 end
 function Auxiliary.CreateAzuristRestriction(c,id)
 	-- Cannot be material
@@ -55,5 +60,11 @@ function Auxiliary.CreateAzuristRestriction(c,id)
 	e2:SetCondition(function(e) return e:GetHandler():GetFlagEffect(id)>0 end)
 	e2:SetValue(1)
 	c:RegisterEffect(e2)
-	return e1 and e2
+	local e3=Effect.CreateEffect(c)
+	e3:SetType(EFFECT_TYPE_SINGLE+EFFECT_TYPE_CONTINUOUS)
+	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e3:SetCondition(function(e) return e:GetHandler():GetFlagEffect(2100000027)>0 end)
+	e3:SetOperation(Azurist.resetflag(id)
+	c:RegisterEffect(e3)
+	return e1 and e2 and e3
 end
