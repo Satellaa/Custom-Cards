@@ -68,5 +68,8 @@ function Auxiliary.CreateAzuristRestriction(c,id)
 	e3:SetCondition(function(e) return e:GetHandler():GetFlagEffect(2100000027)>0 end)
 	e3:SetOperation(Azurist.resetflag(id))
 	c:RegisterEffect(e3)
+	local e4=e3:Clone()
+	e4:SetCode(EVENT_SPSUMMON_SUCCESS)
+	c:RegisterEffect(e4)
 	return e1 and e2 and e3
 end
