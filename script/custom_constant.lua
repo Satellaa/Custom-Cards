@@ -45,6 +45,10 @@ function Azurist.resetflag(id)
 		e:GetHandler():ResetFlagEffect(id)
 	end
 end
+function Azurist.matlimit(e,c)
+	if not c then return false end
+	return not c:IsRace(RACE_SPELLCASTER)
+end
 function Auxiliary.CreateAzuristRestriction(c,id)
 	-- Cannot be material
 	local e1=Effect.CreateEffect(c)
@@ -68,5 +72,12 @@ function Auxiliary.CreateAzuristRestriction(c,id)
 	e3:SetCondition(function(e) return e:GetHandler():GetFlagEffect(2100000027)>0 end)
 	e3:SetOperation(Azurist.resetflag(id))
 	c:RegisterEffect(e3)
-	return e1 and e2 and e3
+	local e4=Effect.CreateEffect(c)
+	e4:SetType(EFFECT_TYPE_SINGLE)
+	e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
+	e4:SetCode(EFFECT_CANNOT_BE_MATERIAL)
+	e4:SetCondition(function(e) return e:GetHandler():GetFlagEffect(2100000027)>0 end)
+	e4:SetValue(Azurist.matlimit)
+	c:RegisterEffect(e4)
+	return e1 and e2 and e3 and e4
 end
