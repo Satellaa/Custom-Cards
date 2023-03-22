@@ -1,3 +1,7 @@
+--Custom archetype constant
+SET_AZURIST                        = 0xf16
+
+
 function Auxiliary.BitSplit(v)
 	local res={}
 	local i=0
