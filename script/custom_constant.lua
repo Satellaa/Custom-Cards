@@ -40,7 +40,7 @@ function Azurist.registerflag(id)
 		e:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,EFFECT_FLAG_CLIENT_HINT,0,1,3399)
 	end
 end
-function Azurist.registerflag(id)
+function Azurist.resetflag(id)
 	return function(e,tp,eg,ep,ev,re,r,rp)
 		e:GetHandler():ResetFlagEffect(id)
 	end
