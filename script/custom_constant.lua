@@ -1,6 +1,6 @@
---Custom archetype constant
+--Customconstant
 SET_AZURIST                        = 0xf16
-
+CARD_THE_AZURE_PROJECT          = 2100000027
 
 function Auxiliary.BitSplit(v)
 	local res={}
@@ -69,14 +69,14 @@ function Auxiliary.CreateAzuristRestriction(c,id)
 	e3:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e3:SetCode(EVENT_CUSTOM+id)
 	e3:SetRange(LOCATION_MZONE)
-	e3:SetCondition(function(e) return e:GetHandler():GetFlagEffect(2100000027)>0 end)
+	e3:SetCondition(function(e) return e:GetHandler():GetFlagEffect(CARD_THE_AZURE_PROJECT)>0 end)
 	e3:SetOperation(Azurist.resetflag(id))
 	c:RegisterEffect(e3)
 	local e4=Effect.CreateEffect(c)
 	e4:SetType(EFFECT_TYPE_SINGLE)
 	e4:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
 	e4:SetCode(EFFECT_CANNOT_BE_MATERIAL)
-	e4:SetCondition(function(e) return e:GetHandler():GetFlagEffect(2100000027)>0 end)
+	e4:SetCondition(function(e) return e:GetHandler():GetFlagEffect(CARD_THE_AZURE_PROJECT)>0 end)
 	e4:SetValue(Azurist.matlimit)
 	c:RegisterEffect(e4)
 	return e1 and e2 and e3 and e4
