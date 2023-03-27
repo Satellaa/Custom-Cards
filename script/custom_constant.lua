@@ -34,6 +34,38 @@ function Auxiliary.GetTypeStrings(v)
 	return pairs(res)
 end
 
+-- This function takes a card or a group of cards and two locations and returns a group of monsters in the adjacent column or diagonal of the card or any card in the group
+-- c|group: card or group of cards to get adjacent monsters for
+-- loc1: location of the monsters on the same side as the card or the cards in the group (default 0)
+-- loc2: location of the monsters on the opposite side as the card or the cards in the group (default 0)
+function Auxiliary.GetAdjacent(c_or_group,loc1,loc2)
+  local result = Group.CreateGroup()
+  loc1 = loc1 or 0
+  loc2 = loc2 or 0
+  local monsters = Duel.GetMatchingGroup(Card.IsType,c_or_group:GetControler(),loc1,loc2,nil,TYPE_MONSTER)
+  if type(c_or_group)=="Group" then
+    for tc in aux.Next(c_or_group) do
+      local seq = tc:GetSequence()
+      for m in aux.Next(monsters) do
+        local mseq = m:GetSequence()
+        if math.abs(seq - mseq) == 1 or math.abs(seq - mseq) == 4 then
+          result:AddCard(m)
+        end
+      end
+    end
+    return result
+  else
+    local seq = c_or_group:GetSequence()
+    for m in aux.Next(monsters) do
+      local mseq = m:GetSequence()
+      if math.abs(seq - mseq) == 1 or math.abs(seq - mseq) == 4 then
+        result:AddCard(m)
+      end
+    end
+    return result
+  end  
+end
+
 local Azurist={}
 function Azurist.registerflag(id)
 	return function(e,tp,eg,ep,ev,re,r,rp)
