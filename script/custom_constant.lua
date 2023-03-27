@@ -34,15 +34,17 @@ function Auxiliary.GetTypeStrings(v)
 	return pairs(res)
 end
 
--- This function takes a card or a group of cards and two locations and returns a group of monsters in the adjacent column or diagonal of the card or any card in the group
--- c|group: card or group of cards to get adjacent monsters for
--- loc1: location of the monsters on the same side as the card or the cards in the group (default 0)
--- loc2: location of the monsters on the opposite side as the card or the cards in the group (default 0)
-function Auxiliary.GetAdjacent(c_or_group,loc1,loc2)
+-- This function takes a card or a group of cards, a card type and two locations and returns a group of cards in the adjacent column or diagonal of the card or the cards
+-- c_or_group: the card or the group of cards to get adjacent cards for
+-- cardtype: the type of the cards to get (default TYPE_MONSTER)
+-- loc1: the location of the cards on the same side as the card or the cards (default LOCATION_MZONE)
+-- loc2: the location of the cards on the opposite side as the card or the cards (default LOCATION_MZONE)
+function Auxiliary.GetAdjacent(c_or_group,cardtype,loc1,loc2)
   local result = Group.CreateGroup()
-  loc1 = loc1 or 0
-  loc2 = loc2 or 0
-  local monsters = Duel.GetMatchingGroup(Card.IsType,c_or_group:GetControler(),loc1,loc2,nil,TYPE_MONSTER)
+  cardtype = cardtype or TYPE_MONSTER
+  loc1 = loc1 or LOCATION_MZONE
+  loc2 = loc2 or LOCATION_MZONE
+  local monsters = Duel.GetMatchingGroup(Card.IsType,c_or_group:GetControler(),loc1,loc2,nil,cardtype)
   if type(c_or_group)=="Group" then
     for tc in aux.Next(c_or_group) do
       local seq = tc:GetSequence()
