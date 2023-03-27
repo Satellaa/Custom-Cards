@@ -44,11 +44,11 @@ function Auxiliary.GetAdjacent(c_or_group,cardtype,loc1,loc2)
   cardtype = cardtype or TYPE_MONSTER
   loc1 = loc1 or LOCATION_MZONE
   loc2 = loc2 or LOCATION_MZONE
-  local monsters = Duel.GetMatchingGroup(Card.IsType,c_or_group:GetControler(),loc1,loc2,nil,cardtype)
+  local cards = Duel.GetMatchingGroup(Card.IsType,c_or_group:GetControler(),loc1,loc2,nil,cardtype)
   if type(c_or_group)=="Group" then
     for tc in aux.Next(c_or_group) do
       local seq = tc:GetSequence()
-      for m in aux.Next(monsters) do
+      for m in aux.Next(cards) do
         local mseq = m:GetSequence()
         if math.abs(seq - mseq) == 1 or math.abs(seq - mseq) == 4 then
           result:AddCard(m)
@@ -58,7 +58,7 @@ function Auxiliary.GetAdjacent(c_or_group,cardtype,loc1,loc2)
     return result
   else
     local seq = c_or_group:GetSequence()
-    for m in aux.Next(monsters) do
+    for m in aux.Next(cards) do
       local mseq = m:GetSequence()
       if math.abs(seq - mseq) == 1 or math.abs(seq - mseq) == 4 then
         result:AddCard(m)
