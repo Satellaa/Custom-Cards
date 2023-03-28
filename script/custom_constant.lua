@@ -36,7 +36,7 @@ end
 
 -- This function takes a card or a group of cards, a card type and two locations and returns a group of cards in the adjacent column or diagonal of the card or the cards
 -- c_or_group: the card or the group of cards to get adjacent cards for
--- cardtype: the type of the cards to get (default TYPE_MONSTER)
+-- cardtype: the type of the cards to get (default TYPE_MONSTE)
 -- loc1: the location of the cards on the same side as the card or the cards (default LOCATION_MZONE)
 -- loc2: the location of the cards on the opposite side as the card or the cards (default LOCATION_MZONE)
 function Auxiliary.GetAdjacent(c_or_group,cardtype,loc1,loc2)
@@ -44,6 +44,18 @@ function Auxiliary.GetAdjacent(c_or_group,cardtype,loc1,loc2)
   cardtype = cardtype or TYPE_MONSTER
   loc1 = loc1 or LOCATION_MZONE
   loc2 = loc2 or LOCATION_MZONE
+  -- Check if c_or_group is a card or a group
+  if type(c_or_group)~="Card" and type(c_or_group)~="Group" then
+    error("Parameter 1 should be \"Card\" or \"Group\"",2)
+  end
+  -- Check if cardtype is a number
+  elseif type(cardtype)~="number" then
+    error("Parameter 2 should be \"number\"",2)
+  end
+  -- Check if loc1 and loc2 are numbers
+  elseif type(loc1)~="number" or type(loc2)~="number" then
+    error("Parameter 3 and 4 should be \"number\"",2)
+  end
   local cards = Duel.GetMatchingGroup(Card.IsType,c_or_group:GetControler(),loc1,loc2,nil,cardtype)
   if type(c_or_group)=="Group" then
     for tc in aux.Next(c_or_group) do
