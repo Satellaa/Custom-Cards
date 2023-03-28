@@ -34,7 +34,6 @@ function Auxiliary.GetTypeStrings(v)
 	return pairs(res)
 end
 
-
 local Azurist={}
 function Azurist.registerflag(id)
 	return function(e,tp,eg,ep,ev,re,r,rp)
