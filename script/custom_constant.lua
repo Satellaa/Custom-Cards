@@ -50,20 +50,17 @@ function Auxiliary.GetAdjacent(c_or_group,cardtype,loc1,loc2)
       local seq = tc:GetSequence()
       for m in aux.Next(cards) do
       	if seq == 0 then
-  			  if mseq == 1 or mseq == 4 then
+  			if mseq == 1 or mseq == 4 then
     	  	result:AddCard(m)
-  		end
 	  	elseif seq == 4 then
-  			  if mseq == 0 or mseq == 3 then
+  			if mseq == 0 or mseq == 3 then
     	  	result:AddCard(m)
-  		end
 	  	else
-  		    if math.abs(seq - mseq) == 1 then
-          result:AddCard(m)
+  			if math.abs(seq - mseq) == 1 then
+          	result:AddCard(m)
 		  end
 	   end
-    end
-   end
+	end
     return result
   else
     local seq = c_or_group:GetSequence()
@@ -72,11 +69,9 @@ function Auxiliary.GetAdjacent(c_or_group,cardtype,loc1,loc2)
       if seq == 0 then
   		if mseq == 1 or mseq == 4 then
     	  result:AddCard(m)
-  	end
 	  elseif seq == 4 then
   		if mseq == 0 or mseq == 3 then
     	  result:AddCard(m)
-  	end
 	  else
   		if math.abs(seq - mseq) == 1 then
           result:AddCard(m)
