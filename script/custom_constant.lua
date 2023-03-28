@@ -53,7 +53,7 @@ function Auxiliary.GetAdjacent(c_or_group,left,right)
    end
   else
     return nil
-  end
+   end
 end
 
 local Azurist={}
