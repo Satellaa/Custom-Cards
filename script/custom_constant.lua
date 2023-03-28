@@ -34,49 +34,7 @@ function Auxiliary.GetTypeStrings(v)
 	return pairs(res)
 end
 
--- This function takes a card or a group of cards, a card type and two locations and returns a group of cards in the adjacent column of the card or the cards
--- c_or_group: the card or the group of cards to get adjacent cards for
--- cardtype: the type of the cards to get (default TYPE_MONSTER)
--- loc1: the location of the cards on the same side as the card or the cards (default LOCATION_MZONE)
--- loc2: the location of the cards on the opposite side as the card or the cards (default LOCATION_MZONE)
-function Auxiliary.GetAdjacent(c_or_group,cardtype,loc1,loc2)
-  local result = Group.CreateGroup()
-  cardtype = cardtype or TYPE_MONSTER
-  loc1 = loc1 or LOCATION_MZONE
-  loc2 = loc2 or LOCATION_MZONE
-  local cards = Duel.GetMatchingGroup(Card.IsType,c_or_group:GetControler(),loc1,loc2,nil,cardtype)
-  if type(c_or_group)=="Group" then
-    for tc in aux.Next(c_or_group) do
-      local seq = tc:GetSequence()
-      for m in aux.Next(cards) do
-        local mseq = m:GetSequence()
-        if (seq - mseq) == 1 or (seq - mseq) == -1 then
-          result:AddCard(m)
-        elseif seq == 0 and (mseq == 5 or mseq == 1) then
-          result:AddCard(m)
-        elseif seq == 4 and (mseq == -1 or mseq == 3) then
-          result:AddCard(m)
-        elseif seq > 0 and seq < 4 and (mseq == -1 or mseq == 5) then
-        end
-      end
-    end
-    return result
-  else
-    local seq = c_or_group:GetSequence()
-    for m in aux.Next(cards) do
-      local mseq = m:GetSequence()
-      if (seq - mseq) == 1 or (seq - mseq) == -1 then
-        result:AddCard(m)
-      elseif seq == 0 and (mseq == 5 or mseq == 1) then
-        result:AddCard(m)
-      elseif seq == 4 and (mseq == -1 or mseq == 3) then
-        result:AddCard(m)
-      elseif seq > 0 and seq < 4 and (mseq == -1 or mseq == 5) then
-      end
-    end
-    return result
-  end  
-end
+
 
 local Azurist={}
 function Azurist.registerflag(id)
