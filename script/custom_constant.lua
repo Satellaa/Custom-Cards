@@ -34,7 +34,7 @@ function Auxiliary.GetTypeStrings(v)
 	return pairs(res)
 end
 
--- This function takes a card or a group of cards, a card type and two locations and returns a group of cards in the adjacent column or diagonal of the card or the cards
+-- This function takes a card or a group of cards, a card type and two locations and returns a group of cards in the adjacent column of the card or the cards
 -- c_or_group: the card or the group of cards to get adjacent cards for
 -- cardtype: the type of the cards to get (default TYPE_MONSTER)
 -- loc1: the location of the cards on the same side as the card or the cards (default LOCATION_MZONE)
@@ -50,7 +50,7 @@ function Auxiliary.GetAdjacent(c_or_group,cardtype,loc1,loc2)
       local seq = tc:GetSequence()
       for m in aux.Next(cards) do
         local mseq = m:GetSequence()
-        if math.abs(seq - mseq) == 1 then
+        if (seq - mseq) == 1 or (seq - mseq) == -1 or (seq == 0 and mseq == 5) or (seq == 4 and mseq == -1) then
           result:AddCard(m)
         end
       end
@@ -60,7 +60,7 @@ function Auxiliary.GetAdjacent(c_or_group,cardtype,loc1,loc2)
     local seq = c_or_group:GetSequence()
     for m in aux.Next(cards) do
       local mseq = m:GetSequence()
-      if math.abs(seq - mseq) == 1 then
+      if (seq - mseq) == 1 or (seq - mseq) == -1 or (seq == 0 and mseq == 5) or (seq == 4 and mseq == -1) then
         result:AddCard(m)
       end
     end
