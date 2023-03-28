@@ -34,7 +34,27 @@ function Auxiliary.GetTypeStrings(v)
 	return pairs(res)
 end
 
-
+-- Used to get the cards in the adjacent column of (card|group).
+-- (int left|nil): left column.
+-- (int right|nil): right column.
+function Auxiliary.GetAdjacent(c_or_group,left,right)
+  local result = Group.CreateGroup()
+  if c_or_group then
+    if type(c_or_group)=="Group" then
+      for tc in aux.Next(c_or_group) do
+        local seq=tc:GetColumnGroup(left,right)-tc:GetColumnGroup()
+        result:AddCard(seq)
+      end
+      return result
+    elseif type(c_or_group)=="Card" then
+      local seq = c_or_group:GetColumnGroup(left,right)-c_or_group:GetColumnGroup()
+      result:AddCard(seq)
+      return result
+   end
+  else
+    return nil
+  end
+end
 
 local Azurist={}
 function Azurist.registerflag(id)
