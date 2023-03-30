@@ -37,7 +37,7 @@ end
 -- Used to get the cards in the adjacent column of (card|group).
 -- (int left|nil): left column.
 -- (int right|nil): right column.
-function Auxiliary.GetAdjacent(c_or_group,left,right)
+function Auxiliary.GetOtherColumnGroup(c_or_group,left,right)
   local result = Group.CreateGroup()
   if c_or_group then
     if type(c_or_group)=="Group" then

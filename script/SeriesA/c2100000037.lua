@@ -49,12 +49,12 @@ function s.thfilter(c,cg)
 	return c:IsAbleToHand() and cg:IsContains(c)
 end
 function s.thtg(e,tp,eg,ep,ev,re,r,rp,chk)
-	local colg=aux.GetAdjacent(e:GetHandler(),1,1)
+	local colg=aux.GetOtherColumnGroup(e:GetHandler(),1,1)
 	if chk==0 then return Duel.IsExistingMatchingCard(s.thfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,nil,colg) end
 	Duel.SetOperationInfo(0,CATEGORY_TOHAND,nil,1,tp,LOCATION_MZONE)
 end
 function s.thop(e,tp,eg,ep,ev,re,r,rp)
-	local colg=aux.GetAdjacent(e:GetHandler(),1,1)
+	local colg=aux.GetOtherColumnGroup(e:GetHandler(),1,1)
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_RTOHAND)
 	local g=Duel.SelectMatchingCard(tp,s.thfilter,tp,LOCATION_MZONE,LOCATION_MZONE,1,1,nil,colg)
 	if #g>0 then
