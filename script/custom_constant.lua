@@ -34,9 +34,9 @@ function Auxiliary.GetTypeStrings(v)
 	return pairs(res)
 end
 
--- Used to get the cards in the adjacent column of (card|group).
--- (int left|nil): left column.
--- (int right|nil): right column.
+-- Used to get columns other than the column of (card|group)
+-- (int left|nil): left column
+-- (int right|nil): right column
 function Auxiliary.GetOtherColumnGroup(c_or_group,left,right)
   local result = Group.CreateGroup()
   if c_or_group then
