@@ -82,7 +82,7 @@ function s.spop(e,tp,eg,ep,ev,re,r,rp)
 	dn:DeleteGroup()
 end
 function s.checkflag(c)
-	for i,v in ipairs(codes) do 
+	for _,v in ipairs(codes) do 
 		if c:GetFlagEffect(v)>0 then 
 			return true
 		end
