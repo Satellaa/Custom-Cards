@@ -72,7 +72,7 @@ end
 function s.sptg2(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	local c=e:GetHandler()
 	if chkc then return chkc:IsLocation(LOCATION_MZONE) and chkc~=c end
-	if chk==0 then return Duel.IsExistingTarget(aux.FaceupFilter(Card.IsRace,RACE_SPELLCASTER),tp,LOCATION_MZONE,LOCATION_MZONE,1,c) end
+	if chk==0 then return Duel.IsExistingMatchingCard(s.splinkfilter,tp,LOCATION_EXTRA,0,1,nil,e,tp,c) and Duel.IsExistingTarget(aux.FaceupFilter(Card.IsRace,RACE_SPELLCASTER),tp,LOCATION_MZONE,LOCATION_MZONE,1,c) end
 	Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TARGET)
 	local g=Duel.SelectTarget(tp,aux.FaceupFilter(Card.IsRace,RACE_SPELLCASTER),tp,LOCATION_MZONE,LOCATION_MZONE,1,1,c)
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,g,1,0,0)
