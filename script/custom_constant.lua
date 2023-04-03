@@ -2,6 +2,13 @@
 SET_AZURIST                        = 0xf16
 CARD_THE_AZURE_PROJECT          = 2100000027
 
+-- A function used to check if (Card c) has more than one race
+function Card.HasMultipleRaces(c)
+    if not c:IsMonster() then return false end
+    local races=c:GetRace()
+    return races>0 and races&(races-1)~=0
+end
+
 function Auxiliary.BitSplit(v)
 	local res={}
 	local i=0
