@@ -3,12 +3,12 @@ SET_AZURIST                        = 0xf16
 CARD_THE_AZURE_PROJECT             = 2100000027
 FLAG_ATK           = 1412
 FLAG_DEF           = 1413
-EVENT_STATS_CHANGE = 50000
-CASE_JUST_CHANGE   = 10000000000001
-CASE_GAIN          = 10000000000002
-CASE_LOSE          = 10000000000003
-CASE_DOUBLE        = 10000000000004
-CASE_HALVED        = 10000000000005
+EVENT_STATS_CHANGE = 0x50000
+CASE_JUST_CHANGE   = 0x50001
+CASE_GAIN          = 0x50002
+CASE_LOSE          = 0x50003
+CASE_DOUBLE        = 0x50003
+CASE_HALVED        = 0x50004
 
 -- A function used to check if (Card c) has more than one race
 function Card.HasMultipleRaces(c)
