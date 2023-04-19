@@ -138,7 +138,7 @@ function Lilac.RaiseEvent(tc,case,boolean,ep,re,r,rp)
 	local flag=boolean and FLAG_ATK or FLAG_DEF
 	local stats=boolean and tc:GetAttack() or tc:GetDefense()
 	if tc:GetFlagEffect(flag)==0 then
-		tc:RegisterFlagEffect(flag,RESET_EVENT+RESETS_STANDARD,0,0,stats)
+		tc:RegisterFlagEffect(flag,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,0,stats)
 	else
 		local prestats=tc:GetFlagEffectLabel(flag)
 		if prestats~=stats and case==CASE_JUST_CHANGE then
