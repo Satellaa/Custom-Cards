@@ -153,7 +153,7 @@ function Lilac.RaiseEvent(tc,case,boolean,ep,re,r,rp)
 end
 function Lilac.checkop(case,boolean)
 	return function(e,tp,eg,ep,ev,re,r,rp)
-		local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
+		local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,0x7f,0x7f,nil)
 			for tc in aux.Next(g) do
 				Lilac.RaiseEvent(tc,case,boolean,ep,re,r,rp)
 		end
