@@ -120,7 +120,7 @@ end
 
 local Lilac = {}
 
--- (Card c) is the card that you will register for this event on
+-- (Card c) is the card that will be the owner of this event
 -- (int case) are cases where stats change
 -- (bool stats) if true, an event occurs when the monster's ATK is changed, and vice versa if false
 function Auxiliary.StatsChangeEvent(c,case,boolean)
