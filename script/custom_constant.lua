@@ -1,6 +1,12 @@
 --Customconstant
 SET_AZURIST                        = 0xf16
-CARD_THE_AZURE_PROJECT          = 2100000027
+CARD_THE_AZURE_PROJECT             = 2100000027
+EVENT_STATS_CHANGE                 = 10000000000000
+CASE_JUST_CHANGE                   = 10000000000001
+CASE_GAIN                          = 10000000000002
+CASE_LOSE                          = 10000000000003
+CASE_DOUBLE                        = 10000000000004
+CASE_HALVED                        = 10000000000005
 
 -- A function used to check if (Card c) has more than one race
 function Card.HasMultipleRaces(c)
@@ -109,4 +115,62 @@ function Auxiliary.CreateAzuristRestriction(c,id)
 	ep2:SetValue(Azurist.matlimit)
 	c:RegisterEffect(ep2)
 	return e1 and e2 and ep1 and ep2
+end
+
+
+local Lilac = {}
+
+-- (Card c) is the card that you will register for this event on
+-- (int case) are cases where stats change
+-- (bool stats) if true, an event occurs when the monster's ATK is changed, and vice versa if false
+function Auxiliary.StatsChangeEvent(c,case,boolean)
+    local e1=Effect.CreateEffect(c)
+    e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+    e1:SetCode(EVENT_ADJUST)
+    e1:SetOperation(Lilac.checkop(case,boolean))
+    Duel.RegisterEffect(e1,0)
+end
+function Lilac.RaiseEvent(tc,e,case,boolean)
+	-- stats is current stats
+	-- prestats is pre stats
+	local c=e:GetHandler()
+	local code=0
+	local stats=nil
+	if boolean then -- If true, it will to the ATK case
+		code=1412
+		stats=tc:GetAttack()
+	else -- Otherwise if false
+		code=1413 
+		stats=tc:GetDefense()
+	end 
+	if tc:GetFlagEffect(code)==0 then
+		tc:RegisterFlagEffect(code,RESET_EVENT+RESETS_STANDARD,0,0,stats)
+	else
+		local prestats=tc:GetFlagEffectLabel(code)
+		if prestats~=stats and case==CASE_JUST_CHANGE then
+			Duel.RaiseEvent(c,EVENT_STATS_CHANGE,e,0,0,0,0) 
+			Duel.RaiseSingleEvent(c,EVENT_STATS_CHANGE,e,0,0,0,0) 
+		elseif prestats<stats and case==CASE_GAIN then
+			Duel.RaiseEvent(c,EVENT_STATS_CHANGE,e,0,0,0,0)
+			Duel.RaiseSingleEvent(c,EVENT_STATS_CHANGE,e,0,0,0,0) 
+		elseif prestats>stats and case==CASE_LOSE then
+			Duel.RaiseEvent(c,EVENT_STATS_CHANGE,e,0,0,0,0)
+			Duel.RaiseSingleEvent(c,EVENT_STATS_CHANGE,e,0,0,0,0)
+		elseif stats==prestats*2 and case==CASE_DOUBLE then
+			Duel.RaiseEvent(c,EVENT_STATS_CHANGE,e,0,0,0,0)
+			Duel.RaiseSingleEvent(c,EVENT_STATS_CHANGE,e,0,0,0,0)
+		elseif stats==prestats/2 and case==CASE_HALVED then
+			Duel.RaiseEvent(c,EVENT_STATS_CHANGE,e,0,0,0,0)
+			Duel.RaiseSingleEvent(c,EVENT_STATS_CHANGE,e,0,0,0,0) 
+		end
+		tc:SetFlagEffectLabel(code,stats) -- Set to current stats, otherwise still raise event
+	end
+end
+function Lilac.checkop(case,boolean)
+	return function(e,tp,eg,ep,ev,re,r,rp)
+		local g=Duel.GetMatchingGroup(Card.IsFaceup,tp,LOCATION_MZONE,LOCATION_MZONE,nil)
+			for tc in aux.Next(g) do
+				Lilac.RaiseEvent(tc,e,case,boolean)
+		end
+	end
 end
