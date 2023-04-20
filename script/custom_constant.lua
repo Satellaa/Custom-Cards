@@ -1,5 +1,6 @@
 --Customconstant
 SET_AZURIST                        = 0xf16
+SET_STARRYTAIL                     = 0xf13
 CARD_THE_AZURE_PROJECT             = 2100000027
 FLAG_ATK           = 1412
 FLAG_DEF           = 1413
