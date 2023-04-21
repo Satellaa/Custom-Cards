@@ -43,7 +43,8 @@ function Card.IsStatsChanged(c)
 		return c:GetDefense()~=val
 	end
 end
-function Card.GetPrevFlagLabel(c)
+
+function Card.GetPreviousStats(c)
 	local val=0
 	if c:GetFlagEffect(FLAG_PREV_ATK)>0 then val=c:GetFlagEffectLabel(FLAG_PREV_ATK)
 	elseif c:GetFlagEffect(FLAG_PREV_DEF)>0 then val=c:GetFlagEffectLabel(FLAG_PREV_DEF) end
