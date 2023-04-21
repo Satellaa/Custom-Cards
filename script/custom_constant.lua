@@ -1,21 +1,53 @@
---Customconstant
+--Custom constant
+
+-- Set card
 SET_AZURIST                        = 0xf16
 SET_STARRYTAIL                     = 0xf13
+
+-- Card id
 CARD_THE_AZURE_PROJECT             = 2100000027
+
+-- Flag
+FLAG_PREV_ATK      = 1410
+FLAG_PREV_DEF      = 1411
 FLAG_ATK           = 1412
 FLAG_DEF           = 1413
+
+-- Event
 EVENT_STATS_CHANGE = 0x50000
+
+-- Case
 CASE_JUST_CHANGE   = 0x50001
 CASE_GAIN          = 0x50002
 CASE_LOSE          = 0x50003
 CASE_DOUBLE        = 0x50003
 CASE_HALVED        = 0x50004
 
+-- __________________________________________
+
 -- A function used to check if (Card c) has more than one race
 function Card.HasMultipleRaces(c)
     if not c:IsMonster() then return false end
     local races=c:GetRace()
     return races>0 and races&(races-1)~=0
+end
+
+function Card.IsStatsChanged(c)
+	local val=0
+	local prev_flag=0
+	if c:GetFlagEffect(FLAG_PREV_ATK)>0 then val=c:GetFlagEffectLabel(FLAG_PREV_ATK) prev_flag=FLAG_PREV_ATK
+	elseif c:GetFlagEffect(FLAG_PREV_DEF)>0 then val=c:GetFlagEffectLabel(FLAG_PREV_DEF) prev_flag=FLAG_PREV_DEF end
+	if prev_flag==FLAG_PREV_ATK then
+		return c:GetAttack()~=val
+	elseif prev_flag==FLAG_PREV_DEF then
+		return c:GetDefense()~=val
+	end
+end
+function Card.GetPrevFlagLabel(c)
+	local val=0
+	if c:GetFlagEffect(FLAG_PREV_ATK)>0 then val=c:GetFlagEffectLabel(FLAG_PREV_ATK)
+	elseif c:GetFlagEffect(FLAG_PREV_DEF)>0 then val=c:GetFlagEffectLabel(FLAG_PREV_DEF) end
+	return val
 end
 
 function Auxiliary.BitSplit(v)
@@ -121,7 +153,7 @@ function Auxiliary.CreateAzuristRestriction(c,id)
 end
 
 
-local Lilac = {}
+Lilac = {}
 
 -- (Card c) is the card that will be the owner of this event
 -- (int case) are cases where stats change
@@ -130,33 +162,85 @@ function Auxiliary.StatsChangeEvent(c,case,boolean)
     local e1=Effect.CreateEffect(c)
     e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
     e1:SetCode(EVENT_ADJUST)
-    e1:SetOperation(Lilac.checkop(case,boolean))
+    e1:SetOperation(Lilac.RegisterFlag(case,boolean))
     Duel.RegisterEffect(e1,0)
+    local e2=Effect.CreateEffect(c)
+    e2:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+    e2:SetCode(EVENT_CHAIN_SOLVED)
+    e2:SetOperation(Lilac.RaiseEffect(case,boolean))
+    Duel.RegisterEffect(e2,0)
+    local e3=Effect.CreateEffect(c)
+    e3:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+    e3:SetCode(EVENT_CHAIN_SOLVING)
+    e3:SetOperation(Lilac.SetPrevStats(boolean))
+    Duel.RegisterEffect(e3,0)
 end
-function Lilac.RaiseEvent(tc,case,boolean,ep,re,r,rp)
-	-- stats is current stats
-	-- prestats is pre stats
-	local flag=boolean and FLAG_ATK or FLAG_DEF
-	local stats=boolean and tc:GetAttack() or tc:GetDefense()
-	if tc:GetFlagEffect(flag)==0 then
-		tc:RegisterFlagEffect(flag,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,0,stats)
-	else
-		local prestats=tc:GetFlagEffectLabel(flag)
-		if prestats~=stats and case==CASE_JUST_CHANGE then
-			Duel.RaiseEvent(tc,EVENT_STATS_CHANGE,re,REASON_EFFECT,rp,ep,0) 
-			Duel.RaiseSingleEvent(tc,EVENT_STATS_CHANGE,re,REASON_EFFECT,rp,ep,0) 
-		elseif (prestats<stats and case==CASE_GAIN) or (prestats>stats and case==CASE_LOSE) or (stats==prestats*2 and case==CASE_DOUBLE) or (stats==prestats/2 and case==CASE_HALVED) then
-			Duel.RaiseEvent(tc,EVENT_STATS_CHANGE,re,REASON_EFFECT,rp,ep,0)
-			Duel.RaiseSingleEvent(tc,EVENT_STATS_CHANGE,re,REASON_EFFECT,rp,ep,0) 
+function Lilac.RegisterFlag(case,boolean)
+	return function(e,tp,eg,ep,ev,re,r,rp)
+		local stats=0
+		local prev_stats=0
+		local flag=boolean and FLAG_ATK or FLAG_DEF
+		local prev_flag=boolean and FLAG_PREV_ATK or FLAG_PREV_DEF
+		local g=Duel.GetMatchingGroup(nil,tp,0x7f,0x7f,nil)
+			for tc in aux.Next(g) do
+				if tc:GetFlagEffect(prev_flag)==0 and tc:GetFlagEffect(flag)==0 then
+					stats=boolean and tc:GetAttack() or tc:GetDefense()
+					prev_stats=boolean and tc:GetBaseAttack() or tc:GetBaseDefense()
+					tc:RegisterFlagEffect(prev_flag,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,0,prev_stats)
+					tc:RegisterFlagEffect(flag,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,0,stats)
+			end
 		end
-		tc:SetFlagEffectLabel(flag,stats) -- Set to current stats, otherwise still raise event
 	end
 end
-function Lilac.checkop(case,boolean)
+function Lilac.RaiseEvent(tc,case,boolean,e,ep,re,r,rp)
+	-- stats is current stats
+	-- prevstats is pre stats
+	local prev_flag=boolean and FLAG_PREV_ATK or FLAG_PREV_DEF
+	local stats=boolean and tc:GetAttack() or tc:GetDefense()
+	local prev_stats=boolean and tc:GetBaseAttack() or tc:GetBaseDefense()
+	local flag=boolean and FLAG_ATK or FLAG_DEF
+	local prevstats=tc:GetFlagEffectLabel(flag)
+	local c=e:GetHandler()
+	if prevstats~=stats and case==CASE_JUST_CHANGE then
+		Duel.RaiseEvent(tc,EVENT_STATS_CHANGE,re,REASON_EFFECT,rp,ep,0)
+		Duel.RaiseSingleEvent(tc,EVENT_STATS_CHANGE,re,REASON_EFFECT,rp,ep,0)
+		c:RegisterFlagEffect(c:GetCode(),RESET_EVENT+RESETS_STANDARD_DISABLE,0,0)
+	elseif (prevstats<stats and case==CASE_GAIN) or (prevstats>stats and case==CASE_LOSE) or (stats==prevstats*2 and case==CASE_DOUBLE) or (stats==prevstats/2 and case==CASE_HALVED) then
+		Duel.RaiseEvent(tc,EVENT_STATS_CHANGE,re,REASON_EFFECT,rp,ep,0)
+		Duel.RaiseSingleEvent(tc,EVENT_STATS_CHANGE,re,REASON_EFFECT,rp,ep,0) 
+		c:RegisterFlagEffect(c:GetCode(),RESET_EVENT+RESETS_STANDARD_DISABLE,0,0)
+	end
+	tc:SetFlagEffectLabel(flag,stats)
+end
+function Lilac.RaiseEffect(case,boolean)
 	return function(e,tp,eg,ep,ev,re,r,rp)
 		local g=Duel.GetMatchingGroup(nil,tp,0x7f,0x7f,nil)
 			for tc in aux.Next(g) do
-				Lilac.RaiseEvent(tc,case,boolean,ep,re,r,rp)
+				Lilac.RaiseEvent(tc,case,boolean,e,ep,re,r,rp)
+		end
+	end
+end
+function Lilac.ChangeLabel(tp,flag)
+	local function cfilter(c)
+	return c:GetAttack()~=c:GetFlagEffectLabel(flag)
+	end
+	local set_stats=nil
+	local g=Duel.GetMatchingGroup(cfilter,tp,0x7f,0x7f,nil)
+	for tc in aux.Next(g) do
+		if flag==FLAG_PREV_ATK then set_stats=tc:GetAttack()
+		elseif flag==FLAG_PREV_DEF then set_stats=tc:GetDefense() end
+		tc:SetFlagEffectLabel(flag,set_stats)
+	end
+end
+function Lilac.SetPrevStats(boolean)
+	return function(e,tp,eg,ep,ev,re,r,rp)
+		local c=e:GetHandler()
+		local flag=0
+		if c:GetFlagEffect(c:GetCode())>0 then
+			if boolean then flag=FLAG_PREV_ATK
+			else flag=FLAG_PREV_DEF end
+			Lilac.ChangeLabel(tp,flag)
+			c:ResetFlagEffect(c:GetCode())
 		end
 	end
 end
