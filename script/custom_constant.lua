@@ -187,28 +187,25 @@ end
 function Lilac.RegisterFlag(stat)
 	return function(e,tp,eg,ep,ev,re,r,rp)
 		local g=Duel.GetMatchingGroup(nil,tp,0x7f,0x7f,nil)
-			for tc in aux.Next(g) do
-				if tc:GetFlagEffect(stat)==0 then
-					local value=tc:GetStats(stat) -- call the Card.GetStats function to get the value
-					tc:RegisterFlagEffect(stat,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,0,value) -- this flag stores the current value
-					tc:RegisterFlagEffect(stat+1000,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,0,value) -- this flag stores the previous value
+		for tc in g:Iter() do
+			if tc:GetFlagEffect(stat)==0 then
+				local value=tc:GetStats(stat) -- call the Card.GetStats function to get the value
+				tc:RegisterFlagEffect(stat,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,0,value) -- this flag stores the current value
+				tc:RegisterFlagEffect(stat+1000,RESET_EVENT+RESETS_STANDARD-RESET_TOFIELD,0,0,value) -- this flag stores the previous value
 			end
 		end
 	end
 end
 
-function Lilac.RaiseEvent(tc,stat,case,e,ep,re,r,rp)
+function Lilac.RaiseEvent(tc,stat,case,e,tp,ep,re,r,rp)
 	local value=tc:GetStats(stat)
 	local prev_value=tc:GetFlagEffectLabel(stat) -- get the previous value from the flag
-	local c=e:GetHandler()
 	if prev_value~=value and case==CASE_JUST_CHANGE then
 		Duel.RaiseEvent(tc,EVENT_STATS_CHANGE,re,REASON_EFFECT,rp,ep,0)
 		Duel.RaiseSingleEvent(tc,EVENT_STATS_CHANGE,re,REASON_EFFECT,rp,ep,0)
-		tc:RegisterFlagEffect(tc:GetCode(),RESET_EVENT+RESETS_STANDARD_DISABLE,0,0)
 	elseif (prev_value<value and case==CASE_GAIN) or (prev_value>value and case==CASE_LOSE) or (value==prev_value*2 and case==CASE_DOUBLE) or (value==prev_value/2 and case==CASE_HALVED) then
 		Duel.RaiseEvent(tc,EVENT_STATS_CHANGE,re,REASON_EFFECT,rp,ep,0)
 		Duel.RaiseSingleEvent(tc,EVENT_STATS_CHANGE,re,REASON_EFFECT,rp,ep,0) 
-		c:RegisterFlagEffect(c:GetCode(),RESET_EVENT+RESETS_STANDARD_DISABLE,0,0)
 	end
 	tc:SetFlagEffectLabel(stat,value)
 end
@@ -216,8 +213,8 @@ end
 function Lilac.RaiseEffect(stat,case)
 	return function(e,tp,eg,ep,ev,re,r,rp)
 		local g=Duel.GetMatchingGroup(nil,tp,0x7f,0x7f,nil)
-			for tc in aux.Next(g) do
-				Lilac.RaiseEvent(tc,stat,case,e,ep,re,r,rp)
+		for tc in g:Iter() do
+			Lilac.RaiseEvent(tc,stat,case,e,tp,ep,re,r,rp)
 		end
 	end
 end
@@ -227,19 +224,19 @@ function Lilac.ChangeLabel(tp,stat,rc)
 	return c:GetFlagEffectLabel(stat+1000)~=c:GetStats(stat)
 	end
 	local g=Duel.GetMatchingGroup(cfilter,tp,0x7f,0x7f,nil)
-	for tc in aux.Next(g) do
+	for tc in g:Iter() do
 		if rc==tc then
-			rc:SetFlagEffectLabel(stat+1000,rc:GetStats(stat)) -- update the previous value flag
+			rc:SetFlagEffectLabel(stat,rc:GetStats(stat))
+			rc:SetFlagEffectLabel(stat+1000,rc:GetStats(stat))
 		end
 	end
 end
 
 function Lilac.SetPrevStats(stat)
 	return function(e,tp,eg,ep,ev,re,r,rp)
-		local rc=re:GetHandler()
-		if rc:GetFlagEffect(rc:GetCode())>0 then
-			Lilac.ChangeLabel(tp,stat,rc)
-			rc:ResetFlagEffect(rc:GetCode())
+		local g=Duel.GetMatchingGroup(nil,tp,0x7f,0x7f,nil)
+		for tc in g:Iter() do
+			Lilac.ChangeLabel(tp,stat,tc)
 		end
 	end
 end
