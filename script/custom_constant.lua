@@ -111,6 +111,11 @@ function Auxiliary.GetOtherColumnGroup(c_or_group,left,right)
    end
 end
 
+function Auxiliary.selftogravecost(e,tp,eg,ep,ev,re,r,rp,chk)
+	if chk==0 then return e:GetHandler():IsAbleToGraveAsCost() end
+	Duel.SendtoGrave(e:GetHandler(),REASON_COST)
+end
+
 local Azurist={}
 function Azurist.registerflag(id)
 	return function(e,tp,eg,ep,ev,re,r,rp)
