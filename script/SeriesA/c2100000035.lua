@@ -77,21 +77,13 @@ function s.tgtg(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	elseif not cg:IsExists(Card.IsSpellTrap,1,nil) then op=Duel.SelectOption(tp,aux.Stringid(id,2))+1
 	else op=Duel.SelectOption(tp,aux.Stringid(id,2),aux.Stringid(id,3))+2 end
 	e:SetLabel(op)
+	e:SetLabelObject(cg)
 	Duel.SetChainLimit(function(e,rp,tp) return not cg:IsContains(e:GetHandler()) end)
-	local c=e:GetHandler()
-	-- An effect for deleting group "cg" has been retained by the "KeepAlive" function, if not deleted it will be retained forever.
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e1:SetCode(EVENT_CHAIN_END)
-	e1:SetProperty(EFFECT_FLAG_CANNOT_DISABLE+EFFECT_FLAG_UNCOPYABLE)
-	e1:SetRange(LOCATION_ALL)
-	e1:SetOperation(s.deleteop)
-	e1:SetLabelObject(cg)
-	c:RegisterEffect(e1)
 	Duel.SetOperationInfo(0,CATEGORY_TOGRAVE,cg,#cg,0,0)
 end
 function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
+	local group=e:GetLabelObject()
 	if not tc:IsRelateToEffect(e) then return end
 	local cg=tc:GetColumnGroup()
 	local g=nil
@@ -100,9 +92,5 @@ function s.tgop(e,tp,eg,ep,ev,re,r,rp)
 	if #g>0 then
 		Duel.SendtoGrave(g,REASON_EFFECT)
 	end
-end
-function s.deleteop(e,tp,eg,ep,ev,re,r,rp)
-	local ctg=e:GetLabelObject()
-	if #ctg==0 then return false end
-	ctg:DeleteGroup()
+	group:DeleteGroup()
 end
