@@ -17,6 +17,12 @@ function Card.HasMultipleRaces(c)
     return races>0 and races&(races-1)~=0
 end
 
+function Card.GetExtraMonsterType(c)
+  local extra_type = TYPE_RITUAL+TYPE_FUSION+TYPE_SYNCHRO+TYPE_XYZ+TYPE_PENDULUM+TYPE_LINK
+  local result = c:GetType()&extra_type
+  return result
+end
+
 -- Auxiliary method
 function Auxiliary.GetTypeStrings(v)
 	local t = {
@@ -35,6 +41,37 @@ function Auxiliary.GetTypeStrings(v)
 		end
 	end
 	return pairs(res)
+end
+
+function Auxiliary.GetSummonType(c)
+	local summon_type_table = {
+    [TYPE_RITUAL] = SUMMON_TYPE_RITUAL,
+    [TYPE_FUSION] = SUMMON_TYPE_FUSION,
+    [TYPE_SYNCHRO] = SUMMON_TYPE_SYNCHRO,
+    [TYPE_XYZ] = SUMMON_TYPE_XYZ,
+    [TYPE_PENDULUM] = SUMMON_TYPE_PENDULUM,
+    [TYPE_LINK] = SUMMON_TYPE_LINK
+  }
+  local summon_type = summon_type_table[c:GetExtraMonsterType()]
+  if not summon_type then
+    summon_type = 0
+  end
+  return summon_type
+end
+
+function Auxiliary.GetReasonType(c)
+	local reason_type_table = {
+    [TYPE_RITUAL] = REASON_RITUAL,
+    [TYPE_FUSION] = REASON_FUSION,
+    [TYPE_SYNCHRO] = REASON_SYNCHRO,
+    [TYPE_XYZ] = REASON_XYZ,
+    [TYPE_LINK] = REASON_LINK
+  }
+  local reason_type = reason_type_table[c:GetExtraMonsterType()]
+  if not reason_type then
+    reason_type = 0
+  end
+  return reason_type
 end
 
 -- Used to get columns other than the column of (card|group)
