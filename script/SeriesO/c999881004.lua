@@ -2,7 +2,7 @@
 -- Firewall Dragon Darkfluid - Negative
 -- Phòng Hoả Tường Long - Hắc Ám Lưu Thể Phụ Diện
 -- Scripted by Lilac-chan
-Duel.LoadScript("custom_constant.lua")
+Duel.LoadScript("custom_constant&function.lua")
 local s,id=GetID()
 function s.initial_effect(c)
 	c:EnableReviveLimit()

@@ -1,7 +1,7 @@
 -- 霊炎転生
 -- Reinflamenation
 -- Scripted by Lilac
-Duel.LoadScript("custom_constant.lua")
+Duel.LoadScript("custom_constant&function.lua")
 local s,id=GetID()
 function s.initial_effect(c)
 	-- Is also treated as a "Salamangreat" card

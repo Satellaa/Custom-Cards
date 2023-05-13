@@ -1,7 +1,7 @@
 -- 閃術姫ーロゼ
 -- Strategic Ace - Roze
 -- Scripted by Lilac
-Duel.LoadScript("custom_constant.lua")
+Duel.LoadScript("custom_constant&function.lua")
 Duel.LoadScript("c419.lua")
 local s,id=GetID()
 function s.initial_effect(c)

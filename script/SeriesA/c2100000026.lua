@@ -1,6 +1,6 @@
 -- Azurist the Magic Founder
 -- Scripted by Lilac
-Duel.LoadScript("custom_constant.lua")
+Duel.LoadScript("custom_constant&function.lua")
 local s,id=GetID()
 function s.initial_effect(c)
 	-- Summon with 1 tribute
