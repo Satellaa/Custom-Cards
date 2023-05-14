@@ -37,8 +37,9 @@ function s.targetfilter(c,e,tp)
 		and Duel.IsExistingMatchingCard(s.tdfilter,tp,LOCATION_GRAVE,0,1,nil,e,tp,c)
 end
 function s.tdfilter(c,e,tp,tc)
-	return c:IsStatus(STATUS_PROC_COMPLETE) and c:IsCode(tc:GetCode()) and c:IsAbleToDeck()
-		and c:IsCanBeSpecialSummoned(e,aux.GetSummonType(c),tp,false,false) and Duel.GetMZoneCount(tp,tc)>0
+	return c:IsStatus(STATUS_PROC_COMPLETE) and c:IsCode(tc:GetCode())
+		and (c:IsType(TYPE_RITUAL|TYPE_FUSION|TYPE_SYNCHRO|TYPE_LINK) or c:IsType(TYPE_XYZ) and tc:IsCanBeXyzMaterial(c,tp,REASON_EFFECT)) 
+		and c:IsAbleToDeck() and c:IsCanBeSpecialSummoned(e,aux.GetSummonType(c),tp,false,false) and Duel.GetMZoneCount(tp,tc)>0
 end
 function s.target(e,tp,eg,ep,ev,re,r,rp,chk,chkc)
 	if chkc then return chkc:IsControler(tp) and chkc:IsLocation(LOCATION_MZONE) and s.targetfilter(chkc,e,tp) end
@@ -52,7 +53,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 	local tc=Duel.GetFirstTarget()
 	if tc:IsRelateToEffect(e) then
 		Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_TODECK)
-		local tdc=Duel.SelectMatchingCard(tp,s.tdfilter,tp,LOCATION_GRAVE,0,1,1,nil,e,tp,tc):GetFirst()
+		local tdc=Duel.SelectMatchingCard(tp,aux.NecroValleyFilter(s.tdfilter),tp,LOCATION_GRAVE,0,1,1,nil,e,tp,tc):GetFirst()
 		if tdc and Duel.SendtoDeck(tdc,nil,SEQ_DECKSHUFFLE,REASON_EFFECT) then
 			local sc=tdc
 			local rt=0
@@ -62,7 +63,7 @@ function s.activate(e,tp,eg,ep,ev,re,r,rp)
 				rt=REASON_MATERIAL
 			end
 			sc:SetMaterial(Group.FromCards(tc))
-			if sc:IsType(TYPE_XYZ) then
+			if sc:IsType(TYPE_XYZ) and tc:IsCanBeXyzMaterial(sc,tp,REASON_EFFECT) then
 				Duel.Overlay(sc,tc)
 			else
 				Duel.SendtoGrave(tc,REASON_EFFECT+rt+aux.GetReasonType(tc))
