@@ -40,8 +40,19 @@ end
 function s.damop(e,tp,eg,ep,ev,re,r,rp)
 	local p,d=Duel.GetChainInfo(0,CHAININFO_TARGET_PLAYER,CHAININFO_TARGET_PARAM)
 	Duel.Damage(p,d,REASON_EFFECT)
-	aux.DelayedOperation(e:GetHandler(),PHASE_END,id,e,tp,
-		function(ag) return Duel.SendtoGrave(ag,REASON_EFFECT) end,nil,0,0,3400)
+	local c=e:GetHandler()
+	local e1=Effect.CreateEffect(c)
+	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
+	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
+	e1:SetRange(LOCATION_MZONE)
+	e1:SetCode(EVENT_PHASE+PHASE_END)
+	e1:SetCountLimit(1)
+	e1:SetOperation(s.tgop)
+	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
+	c:RegisterEffect(e1,true)
+end
+function s.tgop(e,tp,eg,ep,ev,re,r,rp)
+	Duel.SendtoGrave(e:GetHandler(),REASON_EFFECT)
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
