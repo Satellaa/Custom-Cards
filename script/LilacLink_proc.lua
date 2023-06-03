@@ -25,7 +25,17 @@ function LilacLink.AddProcedure(c,f,min,max,specialchk,desc,extraop)
 	c:RegisterEffect(e1)
 end
 function LilacLink.ConditionFilter(c,f,lc,tp)
-	return c:IsCanBeLinkMaterial(lc,tp) and (not f or f(c,lc,SUMMON_TYPE_LINK|MATERIAL_LINK,tp))
+	local res1=c:IsCanBeLinkMaterial(lc,tp) and (not f or f(c,lc,SUMMON_TYPE_LINK|MATERIAL_LINK,tp))
+	local res2=false
+	local formud_eff=c:IsHasEffect(50366775)
+	if formud_eff then
+		local label={formud_eff:GetLabel()}
+		for i=1,#label-1,2 do
+			c:AssumeProperty(label[i],label[i+1])
+		end
+		res2=c:IsCanBeLinkMaterial(lc,tp) and (not f or f(c,lc,SUMMON_TYPE_LINK|MATERIAL_LINK,tp))
+	end
+	return res1 or res2
 end
 function LilacLink.GetLinkCount(c)
 	if c:IsLinkMonster() and c:GetLink()>1 then
@@ -193,10 +203,23 @@ function LilacLink.Operation(f,minc,maxc,specialchk,exmop)
 						end
 					end
 				end
+				for tc in g:Iter() do
+					local formud_eff=tc:IsHasEffect(50366775)
+					if formud_eff then
+						local res1=tc:IsCanBeLinkMaterial(c,tp) and (not f or f(tc,c,SUMMON_TYPE_LINK|MATERIAL_LINK,tp))
+						local label={formud_eff:GetLabel()}
+						for i=1,#label-1,2 do
+							tc:AssumeProperty(label[i],label[i+1])
+						end
+						local res2=tc:IsCanBeLinkMaterial(c,tp) and (not f or f(tc,c,SUMMON_TYPE_LINK|MATERIAL_LINK,tp))
+						if not res2 or (res1 and res2 and not Duel.SelectEffectYesNo(tp,tc)) then
+							Duel.AssumeReset()
+						end
+					end
+				end
 				c:SetMaterial(g)
 				if exmop then
-					local exg=g:Filter(LilacLink.ExtraopFilter,nil,exmg)
-					local notexg=g:Filter(aux.NOT(LilacLink.ExtraopFilter),nil,exmg)
+					local notexg,exg=g:Split(aux.NOT(LilacLink.ExtraopFilter),nil,exmg)
 					exmop(e,tp,eg,ep,ev,re,r,rp,exg)
 					Duel.SendtoGrave(notexg,REASON_MATERIAL+REASON_LINK)
 				else
