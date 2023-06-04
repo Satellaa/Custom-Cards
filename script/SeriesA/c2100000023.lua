@@ -41,15 +41,7 @@ function tohand(rg,e,tp)
 end
 function s.rmop(e,tp,eg,ep,ev,re,r,rp)
 	local c=e:GetHandler()
-	local e1=Effect.CreateEffect(c)
-	e1:SetType(EFFECT_TYPE_FIELD+EFFECT_TYPE_CONTINUOUS)
-	e1:SetProperty(EFFECT_FLAG_IGNORE_IMMUNE)
-	e1:SetRange(LOCATION_MZONE)
-	e1:SetCode(EVENT_PHASE+PHASE_END)
-	e1:SetCountLimit(1)
-	e1:SetOperation(s.tgop)
-	e1:SetReset(RESET_EVENT+RESETS_STANDARD)
-	c:RegisterEffect(e1,true)
+	aux.DelayedOperation(c,PHASE_END,id+100,e,tp,function(ag) Duel.SendtoGrave(ag,REASON_EFFECT) end,nil,0,1,3400)
 	local sg=Group.CreateGroup()
 	for p=0,1 do
 		Duel.Hint(HINT_SELECTMSG,p,HINTMSG_REMOVE)
@@ -63,9 +55,6 @@ function s.rmop(e,tp,eg,ep,ev,re,r,rp)
 			aux.RemoveUntil(sg,nil,REASON_EFFECT,PHASE_END,id,e,p,tohand)
 		end
 	end
-end
-function s.tgop(e,tp,eg,ep,ev,re,r,rp)
-	Duel.SendtoGrave(e:GetHandler(),REASON_EFFECT)
 end
 function s.spcost(e,tp,eg,ep,ev,re,r,rp,chk)
 	local c=e:GetHandler()
