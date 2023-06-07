@@ -105,20 +105,24 @@ function Auxiliary.selftogravecost(e,tp,eg,ep,ev,re,r,rp,chk)
 end
 
 local Azurist={}
+
 function Azurist.registerflag(id)
 	return function(e,tp,eg,ep,ev,re,r,rp)
 		e:GetHandler():RegisterFlagEffect(id,RESET_EVENT+RESETS_STANDARD+RESET_PHASE+PHASE_END,EFFECT_FLAG_CLIENT_HINT,0,1,3399)
 	end
 end
+
 function Azurist.resetflag(id)
 	return function(e,tp,eg,ep,ev,re,r,rp)
 		e:GetHandler():ResetFlagEffect(id)
 	end
 end
+
 function Azurist.matlimit(e,c)
 	if not c then return false end
 	return not c:IsRace(RACE_SPELLCASTER)
 end
+
 function Auxiliary.CreateAzuristRestriction(c,id)
 	-- Cannot be material
 	local e1=Effect.CreateEffect(c)
@@ -150,6 +154,68 @@ function Auxiliary.CreateAzuristRestriction(c,id)
 	ep2:SetValue(Azurist.matlimit)
 	c:RegisterEffect(ep2)
 	return e1 and e2 and ep1 and ep2
+end
+
+local Lycansquad={}
+
+function Lycansquad.lmfilter(c,lc,tp,id)
+	return c:IsFaceup()
+		and c:IsSummonCode(lc,SUMMON_TYPE_LINK,tp,id) and c:IsCanBeLinkMaterial(lc,tp)
+		and Duel.GetLocationCountFromEx(tp,tp,c,lc)>0
+end
+
+function Lycansquad.condition(id)
+	return function(e,c,must,g,min,max)
+		if c==nil then return true end
+		local tp=c:GetControler()
+		local g=Duel.GetMatchingGroup(Lycansquad.lmfilter,tp,LOCATION_MZONE,0,nil,c,tp,id)
+		local mustg=Auxiliary.GetMustBeMaterialGroup(tp,g,tp,c,g,REASON_LINK)
+		if must then mustg:Merge(must) end
+		return ((#mustg==1 and Lycansquad.lmfilter(mustg:GetFirst(),c,tp)) or (#mustg==0 and #g>0))
+			and Duel.GetFlagEffect(tp,id+EVENT_CUSTOM)>=3
+	end
+end
+
+function Lycansquad.target(id)
+	return function(e,tp,eg,ep,ev,re,r,rp,chk,c,must,g,min,max)
+		local g=Duel.GetMatchingGroup(Lycansquad.lmfilter,tp,LOCATION_MZONE,0,nil,c,tp,id)
+		local mustg=Auxiliary.GetMustBeMaterialGroup(tp,g,tp,c,g,REASON_LINK)
+		if must then mustg:Merge(must) end
+		if #mustg>0 then
+			if #mustg>1 then
+				return false
+			end
+			mustg:KeepAlive()
+			e:SetLabelObject(mustg)
+			return true
+		end
+		local tc=g:SelectUnselect(Group.CreateGroup(),tp,false,true)
+		if tc then
+			local sg=Group.FromCards(tc)
+			sg:KeepAlive()
+			e:SetLabelObject(sg)
+			return true
+		else return false end
+	end
+end
+
+function Lycansquad.operation(e,tp,eg,ep,ev,re,r,rp,c,must,g,min,max)
+	local mg=e:GetLabelObject()
+	c:SetMaterial(mg)
+	Duel.SendtoGrave(mg,REASON_MATERIAL+REASON_LINK)
+end
+
+function Auxiliary.CreateLycansquadAlterLinkProc(c,id)
+	local ly1=Effect.CreateEffect(c)
+	ly1:SetDescription(3401)
+	ly1:SetType(EFFECT_TYPE_FIELD)
+	ly1:SetCode(EFFECT_SPSUMMON_PROC)
+	ly1:SetProperty(EFFECT_FLAG_UNCOPYABLE)
+	ly1:SetRange(LOCATION_EXTRA)
+	ly1:SetCondition(Lycansquad.condition(id))
+	ly1:SetTarget(Lycansquad.target(id))
+	ly1:SetOperation(Lycansquad.operation)
+	c:RegisterEffect(ly1)
 end
 
 -- Duel method
