@@ -1,5 +1,8 @@
 --Custom constant
 
+-- Event
+EVENT_DECKTOP_CONFIRM              = EVENT_CUSTOM+99912
+
 -- Set card
 SET_AZURIST                        = 0xf16
 SET_STARRYTAIL                     = 0xf13
@@ -148,3 +151,18 @@ function Auxiliary.CreateAzuristRestriction(c,id)
 	c:RegisterEffect(ep2)
 	return e1 and e2 and ep1 and ep2
 end
+
+-- Duel method
+Duel.ConfirmDecktop=(function()
+	local oldfunc=Duel.ConfirmDecktop
+	return function(tp,count)
+    	local res=oldfunc(tp,count)
+    	local deckg=Duel.GetDecktopGroup(tp,count)
+    	local tg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_ALL,LOCATION_ALL,nil,EVENT_DECKTOP_CONFIRM)
+    	if #deckg>0 then
+    		deckg:Merge(tg)
+			Duel.RaiseEvent(deckg,EVENT_DECKTOP_CONFIRM,nil,0,tp,tp,0)
+    	end
+    	return deckg:RemoveCard(tg)
+	end
+end)()
