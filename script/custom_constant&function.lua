@@ -158,11 +158,14 @@ Duel.ConfirmDecktop=(function()
 	return function(tp,count)
     	local res=oldfunc(tp,count)
     	local deckg=Duel.GetDecktopGroup(tp,count)
-    	local tg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_ALL,LOCATION_ALL,nil,EVENT_DECKTOP_CONFIRM)
+    	local eg=Duel.GetMatchingGroup(Card.IsHasEffect,tp,LOCATION_ALL,LOCATION_ALL,nil,EVENT_DECKTOP_CONFIRM)
     	if #deckg>0 then
-    		deckg:Merge(tg)
-			Duel.RaiseEvent(deckg,EVENT_DECKTOP_CONFIRM,nil,0,tp,tp,0)
+    		for tc in deckg:Iter() do
+    			Duel.RegisterFlagEffect(tp,tc:GetCode()+EVENT_CUSTOM,RESET_PHASE+PHASE_END,0,1)
+    		end
+    		eg:Merge(deckg)
+			Duel.RaiseEvent(eg,EVENT_DECKTOP_CONFIRM,nil,0,tp,tp,0)
     	end
-    	return deckg:RemoveCard(tg)
+    	return deckg
 	end
 end)()
