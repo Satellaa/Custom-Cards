@@ -159,9 +159,8 @@ end
 local Lycansquad={}
 
 function Lycansquad.lmfilter(c,lc,tp,id)
-	return c:IsFaceup()
-		and c:IsSummonCode(lc,SUMMON_TYPE_LINK,tp,id) and c:IsCanBeLinkMaterial(lc,tp)
-		and Duel.GetLocationCountFromEx(tp,tp,c,lc)>0
+	return c:IsFaceup() and c:IsSummonCode(lc,SUMMON_TYPE_LINK,tp,id) and c:IsCanBeLinkMaterial(lc,tp)
+		and Duel.GetLocationCountFromEx(tp,tp,c,lc)>0 and not c:IsDisabled()
 end
 
 function Lycansquad.condition(id)
