@@ -216,6 +216,7 @@ function Auxiliary.CreateLycansquadAlterLinkProc(c,id)
 	ly1:SetTarget(Lycansquad.target(id))
 	ly1:SetOperation(Lycansquad.operation)
 	c:RegisterEffect(ly1)
+	return ly1
 end
 
 -- Duel method
