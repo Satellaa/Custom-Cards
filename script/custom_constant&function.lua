@@ -214,6 +214,7 @@ function Auxiliary.CreateLycansquadAlterLinkProc(c,id)
 	ly1:SetCondition(Lycansquad.condition(id))
 	ly1:SetTarget(Lycansquad.target(id))
 	ly1:SetOperation(Lycansquad.operation)
+	ly1:SetValue(SUMMON_TYPE_LINK)
 	c:RegisterEffect(ly1)
 	return ly1
 end
