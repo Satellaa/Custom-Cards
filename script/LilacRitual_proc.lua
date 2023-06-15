@@ -223,6 +223,9 @@ function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselect
 					local ExtraLocSingleEffGroup=Duel.GetMatchingGroup(Ritual.ExtraLocFilter,tp,LOCATION_NOTHAND,0,e:GetHandler(),filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos,true)
 					if #ExtraLocSingleEffGroup>0 then
 						FinalGroup:Merge(ExtraLocSingleEffGroup)
+						for tc in ExtraLocSingleEffGroup:Iter() do
+							location=location|tc:GetLocation()
+						end
 					end
 					local ExtraLocEff=Duel.IsPlayerAffectedByEffect(tp,EFFECT_EXTRA_RITUAL_LOCATION)
 					if ExtraLocEff and ExtraLocEff:CheckCountLimit(tp) then
