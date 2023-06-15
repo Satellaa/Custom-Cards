@@ -74,9 +74,9 @@ function s.stage2(mg,e,tp,eg,ep,ev,re,r,rp,tc)
 				eff2:SetCode(EVENT_FREE_CHAIN)
 				eff2:SetHintTiming(0,TIMINGS_CHECK_MONSTER_E)
 				eff2:SetCondition(s.albazoaquickcon)
-				eff2:SetReset(RESET_PHASE|PHASE_END)
+				eff2:SetReset(RESET_EVENT|RESETS_STANDARD|RESET_PHASE|PHASE_END)
 				tc:RegisterEffect(eff2)
-				tc:RegisterFlagEffect(id,RESET_PHASE|PHASE_END,0,1)
+				tc:RegisterFlagEffect(id,RESET_EVENT|RESETS_STANDARD|RESET_PHASE|PHASE_END,0,1)
 			end
 		end
 	end
