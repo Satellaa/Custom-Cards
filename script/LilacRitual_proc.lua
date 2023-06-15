@@ -7,7 +7,6 @@ if not Ritual then
 end
 
 EFFECT_EXTRA_RITUAL_LOCATION = EVENT_CUSTOM+200
-
 LOCATION_NOTHAND=LOCATION_DECK|LOCATION_REMOVED|LOCATION_GRAVE
 
 function Card.GetEffect(c,passedeff)
@@ -224,7 +223,7 @@ function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselect
 					if #ExtraLocSingleEffGroup>0 then
 						FinalGroup:Merge(ExtraLocSingleEffGroup)
 						for tc in ExtraLocSingleEffGroup:Iter() do
-							if (locationfrom&tc:GetLocation())==0 then
+							if (locationfrom&tc:GetLocation())==0 and (tc:GetLocation()&LOCATION_DECK)==0 then
 								locationfrom=locationfrom|tc:GetLocation()
 							end
 						end
@@ -232,7 +231,7 @@ function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselect
 					local ExtraLocEff=Duel.IsPlayerAffectedByEffect(tp,EFFECT_EXTRA_RITUAL_LOCATION)
 					if ExtraLocEff and ExtraLocEff:CheckCountLimit(tp) then
 						local ExtraLoc=ExtraLocEff:GetValue()
-						if (locationfrom&ExtraLoc)==0 then
+						if (locationfrom&ExtraLoc)==0 and (ExtraLoc&LOCATION_DECK)==0 then
 							locationfrom=locationfrom|ExtraLoc
 						end
 						local ReqFunc=ExtraLocEff:GetTarget() or false
