@@ -187,7 +187,7 @@ Ritual.Target = aux.FunctionWithNamedArgs(
 function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselection,specificmatfilter,requirementfunc,sumpos,extratg)
 	location = location or LOCATION_HAND
 	sumpos = sumpos or POS_FACEUP
-	local ExtraLoc=0
+	local locationfrom=location
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk)
 				if chk==0 then
 					local mg=Duel.GetRitualMaterial(tp,not requirementfunc)
@@ -224,12 +224,17 @@ function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselect
 					if #ExtraLocSingleEffGroup>0 then
 						FinalGroup:Merge(ExtraLocSingleEffGroup)
 						for tc in ExtraLocSingleEffGroup:Iter() do
-							location=location|tc:GetLocation()
+							if (locationfrom&tc:GetLocation())==0 then
+								locationfrom=locationfrom|tc:GetLocation()
+							end
 						end
 					end
 					local ExtraLocEff=Duel.IsPlayerAffectedByEffect(tp,EFFECT_EXTRA_RITUAL_LOCATION)
 					if ExtraLocEff and ExtraLocEff:CheckCountLimit(tp) then
-						ExtraLoc=ExtraLocEff:GetValue()
+						local ExtraLoc=ExtraLocEff:GetValue()
+						if (locationfrom&ExtraLoc)==0 then
+							locationfrom=locationfrom|ExtraLoc
+						end
 						local ReqFunc=ExtraLocEff:GetTarget() or false
 						local ExtraLocGroup=Duel.GetMatchingGroup(Ritual.ExtraLocFilter,tp,ExtraLoc,0,e:GetHandler(),filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos,false,ReqFunc)
 						FinalGroup:Merge(ExtraLocGroup)
@@ -238,7 +243,7 @@ function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselect
 					--------------
 				end
 				if extratg then extratg(e,tp,eg,ep,ev,re,r,rp,chk) end
-				Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,location|ExtraLoc)
+				Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,locationfrom)
 			end
 end,"filter","lvtype","lv","extrafil","extraop","matfilter","stage2","location","forcedselection","specificmatfilter","requirementfunc","sumpos","extratg")
 
