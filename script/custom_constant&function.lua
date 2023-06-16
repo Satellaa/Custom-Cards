@@ -47,56 +47,56 @@ function Auxiliary.GetTypeStrings(v)
 end
 
 function Auxiliary.GetSummonType(c)
-	local summon_type_table = {
-    [TYPE_RITUAL] = SUMMON_TYPE_RITUAL,
-    [TYPE_FUSION] = SUMMON_TYPE_FUSION,
-    [TYPE_SYNCHRO] = SUMMON_TYPE_SYNCHRO,
-    [TYPE_XYZ] = SUMMON_TYPE_XYZ,
-    [TYPE_PENDULUM] = SUMMON_TYPE_PENDULUM,
-    [TYPE_LINK] = SUMMON_TYPE_LINK
-  }
-  local summon_type = summon_type_table[c:GetExtraMonsterType()]
-  if not summon_type then
-    summon_type = 0
-  end
-  return summon_type
+	local summon_type_table={
+		[TYPE_RITUAL] = SUMMON_TYPE_RITUAL,
+		[TYPE_FUSION] = SUMMON_TYPE_FUSION,
+		[TYPE_SYNCHRO] = SUMMON_TYPE_SYNCHRO,
+		[TYPE_XYZ] = SUMMON_TYPE_XYZ,
+		[TYPE_PENDULUM] = SUMMON_TYPE_PENDULUM,
+		[TYPE_LINK] = SUMMON_TYPE_LINK
+	}
+	local summon_type = summon_type_table[c:GetExtraMonsterType()]
+	if not summon_type then
+		summon_type = 0
+	end
+	return summon_type
 end
 
 function Auxiliary.GetReasonType(c)
-	local reason_type_table = {
-    [TYPE_RITUAL] = REASON_RITUAL,
-    [TYPE_FUSION] = REASON_FUSION,
-    [TYPE_SYNCHRO] = REASON_SYNCHRO,
-    [TYPE_XYZ] = REASON_XYZ,
-    [TYPE_LINK] = REASON_LINK
-  }
-  local reason_type = reason_type_table[c:GetExtraMonsterType()]
-  if not reason_type then
-    reason_type = 0
-  end
-  return reason_type
+	local reason_type_table={
+		[TYPE_RITUAL] = REASON_RITUAL,
+		[TYPE_FUSION] = REASON_FUSION,
+		[TYPE_SYNCHRO] = REASON_SYNCHRO,
+		[TYPE_XYZ] = REASON_XYZ,
+		[TYPE_LINK] = REASON_LINK
+	}
+	local reason_type = reason_type_table[c:GetExtraMonsterType()]
+	if not reason_type then
+		reason_type = 0
+	end
+	return reason_type
 end
 
 -- Used to get columns other than the column of (card|group)
 -- (int left|nil): left column
 -- (int right|nil): right column
 function Auxiliary.GetOtherColumnGroup(c_or_group,left,right)
-  local result = Group.CreateGroup()
-  if c_or_group then
-    if type(c_or_group)=="Group" then
-      for tc in aux.Next(c_or_group) do
-        local seq=tc:GetColumnGroup(left,right)-tc:GetColumnGroup()
-        result:AddCard(seq)
-      end
-      return result
-    elseif type(c_or_group)=="Card" then
-      local seq = c_or_group:GetColumnGroup(left,right)-c_or_group:GetColumnGroup()
-      result:AddCard(seq)
-      return result
-   end
-  else
-    return nil
-   end
+	local result=Group.CreateGroup()
+	if c_or_group then
+		if type(c_or_group)=="Group" then
+			for tc in aux.Next(c_or_group) do
+				local seq=tc:GetColumnGroup(left,right)-tc:GetColumnGroup()
+				result:AddCard(seq)
+			end
+		return result
+		elseif type(c_or_group)=="Card" then
+			local seq=c_or_group:GetColumnGroup(left,right)-c_or_group:GetColumnGroup()
+			result:AddCard(seq)
+			return result
+		end
+	else
+		return nil
+	end
 end
 
 function Auxiliary.selftogravecost(e,tp,eg,ep,ev,re,r,rp,chk)
