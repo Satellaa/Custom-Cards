@@ -6,6 +6,7 @@ EVENT_DECKTOP_CONFIRM              = EVENT_CUSTOM+99912
 -- Set card
 SET_AZURIST                        = 0xf16
 SET_STARRYTAIL                     = 0xf13
+SET_LYCANSQUAD                     = 0xf17
 
 -- Card id
 CARD_THE_AZURE_PROJECT             = 2100000027
