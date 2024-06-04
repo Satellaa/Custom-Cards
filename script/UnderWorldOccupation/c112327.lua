@@ -83,7 +83,7 @@ end
 
 --Filter for cost
 function s.rtilter(c,tp)
-	return c:IsLevelBelow(3) and c:IsRace(RACE_FIEND)
+	return c:IsLevelBelow(3) and c:IsRace(RACE_FIEND) and c:IsPosition(POS_FACEUP)
 end
 
 --cost, return level 3 or lower fiend monster 
