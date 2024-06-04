@@ -1,4 +1,4 @@
---Stage
+ --Stage
 
 local s,id=GetID()
 function s.initial_effect(c)
@@ -83,7 +83,7 @@ end
 
 --Filter for cost
 function s.rtilter(c,tp)
-	return c:IsLevelBelow(3) and c:IsRace(RACE_FIEND)
+	return c:IsLevelBelow(3) and c:IsRace(RACE_FIEND) and c:IsFaceup()
 end
 
 --cost, return level 3 or lower fiend monster 
