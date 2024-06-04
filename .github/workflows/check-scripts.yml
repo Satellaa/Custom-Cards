@@ -1,0 +1,24 @@
+name: Script validity checker
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+jobs:
+  check-scripts:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - name: Check line endings
+      run: |
+        git add . --renormalize
+        git diff-index --quiet HEAD
+    - name: Download checker
+      run: |
+        curl --retry 5 --connect-timeout 30 --location --remote-header-name --output ScriptChecker.zip https://github.com/ProjectIgnis/ScriptChecker/releases/latest/download/ScriptChecker-linux.zip
+        unzip ScriptChecker.zip
+        rm -rf ScriptChecker.zip
+        curl --retry 5 --connect-timeout 30 --location --remote-header-name --output libocgcore.so https://github.com/ProjectIgnis/bin/raw/master/libocgcore.so
+    - name: Run checker
+      run: |
+        ./script_syntax_check .
