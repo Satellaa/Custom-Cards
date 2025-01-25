@@ -9,6 +9,34 @@ end
 EFFECT_EXTRA_RITUAL_LOCATION = EVENT_CUSTOM+200
 LOCATION_NOTHAND=LOCATION_DECK|LOCATION_REMOVED|LOCATION_GRAVE
 
+
+--required functions
+local function ExtraReleaseFilter(c,tp)
+	return c:IsControler(1-tp) and c:IsHasEffect(EFFECT_EXTRA_RELEASE)
+end
+local function ForceExtraRelease(mg)
+	return function(e,tp,g,c)
+		return g:Includes(mg)
+	end
+end
+local function WrapTableReturn(func)
+	if func then
+		return function(...)
+			return {func(...)}
+		end
+	end
+end
+local function MergeForcedSelection(f1,f2)
+	if f1==nil or f2==nil then
+		return f1 or f2
+	end
+	return function(...)
+		local ret1,ret2=f1(...)
+		local repl1,repl2=f2(...)
+		return ret1 and repl1,ret2 or repl2
+	end
+end
+
 function Card.GetEffect(c,passedeff)
 	local effs={c:IsHasEffect(passedeff)}
 	if effs then
