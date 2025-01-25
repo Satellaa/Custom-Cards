@@ -239,7 +239,7 @@ function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselect
 								mat=mg:SelectWithSumGreater(tp,requirementfunc or Card.GetRitualLevel,lv,tc)
 							end
 						else
-							mat=aux.SelectUnselectGroup(mg,e,tp,1,lv,Ritual.Check(tc,lv,WrapTableReturn(func),_type,requirementfunc),1,tp,HINTMSG_RELEASE,Ritual.Finishcon(tc,lv,requirementfunc,_type))
+							mat=aux.SelectUnselectGroup(mg,e,tp,1,lv,Ritual.Check(tc,lv,WrapTableReturn(func),_type,requirementfunc),1,tp,HINTMSG_RELEASE,Ritual.Finishcon(tc,lv,WrapTableReturn(func),requirementfunc,_type))
 						end
 					end
 					--check if a card from an "once per turn" EFFECT_EXTRA_RITUAL_MATERIAL effect was selected
