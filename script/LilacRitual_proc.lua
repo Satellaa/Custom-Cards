@@ -6,9 +6,8 @@ if not Ritual then
 	Ritual = aux.RitualProcedure
 end
 
-EFFECT_EXTRA_RITUAL_LOCATION = EVENT_CUSTOM+200
+EFFECT_EXTRA_RITUAL_LOCATION = 2500000001
 LOCATION_NOTHAND=LOCATION_DECK|LOCATION_REMOVED|LOCATION_GRAVE
-
 
 --required functions
 local function ExtraReleaseFilter(c,tp)
@@ -36,40 +35,24 @@ local function MergeForcedSelection(f1,f2)
 		return ret1 and repl1,ret2 or repl2
 	end
 end
-
-function Card.GetEffect(c,passedeff)
-	local effs={c:IsHasEffect(passedeff)}
-	if effs then
-		for _,eff in ipairs(effs) do
+local function GetExtraLocationEffect(c,rc)
+	local effs={c:IsHasEffect(EFFECT_EXTRA_RITUAL_LOCATION)}
+	for _,eff in ipairs(effs) do
+		local val=eff:GetValue()
+		if not val or (type(val)=="function" and val(eff,c,rc)) or val==1 then
 			return eff
 		end
 	end
 end
-function Ritual.ExtraLocSingleEffFilter(c,tp,rc)
-	local eff=c:GetEffect(EFFECT_EXTRA_RITUAL_LOCATION)
-	if not eff then return false end
-	local baseefftg=eff:GetTarget() or false
-	if baseefftg then
-		if not baseefftg(c,rc,tp) then return false end
-	end
-	return eff:GetType()&EFFECT_TYPE_SINGLE>0
-		and eff:CheckCountLimit(tp) 
+local function ExtraLocationOPTCheck(c,rc,tp)
+	local extra_loc_eff=GetExtraLocationEffect(c,rc)
+	return extra_loc_eff,extra_loc_eff and not extra_loc_eff:CheckCountLimit(tp)
 end
 function Ritual.ExtraLocFilter(c,filter,_type,e,tp,m,m2,forcedselection,specificmatfilter,lv,requirementfunc,sumpos,booltype,reqfunc)
 	if not (c:IsOriginalType(TYPE_RITUAL) and c:IsOriginalType(TYPE_MONSTER)) or (filter and not filter(c)) or not c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_RITUAL,tp,false,true,sumpos) then return false end
-	if booltype then
-		local eff=c:GetEffect(EFFECT_EXTRA_RITUAL_LOCATION)
-		if not eff then return false end
-		if not (eff:GetType()&EFFECT_TYPE_SINGLE>0 and eff:CheckCountLimit(tp)) then return false end
-		local efftg=eff:GetTarget() or false
-		if efftg then
-			if not efftg(c,e:GetHandler(),tp) then return false end
-		end
-	else
-		if reqfunc then
-			if not reqfunc(c,e:GetHandler(),tp) then return false end
-		end
-	end
+	local extra_loc_eff,used=ExtraLocationOPTCheck(c,e:GetHandler(),tp)
+	if not extra_loc_eff or extra_loc_eff and used then return false end
+	
 	local lv=(lv and (type(lv)=="function" and lv(c)) or lv) or c:GetLevel()
 	lv=math.max(1,lv)
 	Ritual.SummoningLevel=lv
@@ -93,7 +76,6 @@ Ritual.Target = aux.FunctionWithNamedArgs(
 function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselection,specificmatfilter,requirementfunc,sumpos,extratg)
 	location = location or LOCATION_HAND
 	sumpos = sumpos or POS_FACEUP
-	local locationfrom=location
 	return	function(e,tp,eg,ep,ev,re,r,rp,chk)
 				if chk==0 then
 					local mg=Duel.GetRitualMaterial(tp,not requirementfunc)
@@ -123,33 +105,16 @@ function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselect
 					end
 					Ritual.CheckMatFilter(matfilter,e,tp,mg,mg2)
 					-- custom ----
-					local FinalGroup=Group.CreateGroup()
-					local BaseGroup=Duel.GetMatchingGroup(Ritual.Filter,tp,location,0,nil,filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos)
-					FinalGroup:Merge(BaseGroup)
-					local ExtraLocSingleEffGroup=Duel.GetMatchingGroup(Ritual.ExtraLocFilter,tp,LOCATION_NOTHAND,0,e:GetHandler(),filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos,true)
-					if #ExtraLocSingleEffGroup>0 then
-						FinalGroup:Merge(ExtraLocSingleEffGroup)
-						for tc in ExtraLocSingleEffGroup:Iter() do
-							if (locationfrom&tc:GetLocation())==0 and (tc:GetLocation()&LOCATION_DECK)==0 then
-								locationfrom=locationfrom|tc:GetLocation()
-							end
-						end
-					end
-					local ExtraLocEff=Duel.IsPlayerAffectedByEffect(tp,EFFECT_EXTRA_RITUAL_LOCATION)
-					if ExtraLocEff and ExtraLocEff:CheckCountLimit(tp) then
-						local ExtraLoc=ExtraLocEff:GetValue()
-						if (locationfrom&ExtraLoc)==0 and (ExtraLoc&LOCATION_DECK)==0 then
-							locationfrom=locationfrom|ExtraLoc
-						end
-						local ReqFunc=ExtraLocEff:GetTarget() or false
-						local ExtraLocGroup=Duel.GetMatchingGroup(Ritual.ExtraLocFilter,tp,ExtraLoc,0,nil,filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos,false,ReqFunc)
-						FinalGroup:Merge(ExtraLocGroup)
-					end
-					return #FinalGroup>0
+					local final_group=Group.CreateGroup()
+					local base_ritual_group=Duel.GetMatchingGroup(Ritual.Filter,tp,location,0,nil,filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos)
+					local extra_loc_group=Duel.GetMatchingGroup(Ritual.ExtraLocFilter,tp,LOCATION_NOTHAND,0,nil,filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos)
+					final_group:Merge(base_ritual_group)
+					final_group:Merge(extra_loc_group)
+					return #final_group>0
 					--------------
 				end
 				if extratg then extratg(e,tp,eg,ep,ev,re,r,rp,chk) end
-				Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,locationfrom)
+				Duel.SetOperationInfo(0,CATEGORY_SPECIAL_SUMMON,nil,1,tp,location)
 			end
 end,"filter","lvtype","lv","extrafil","extraop","matfilter","stage2","location","forcedselection","specificmatfilter","requirementfunc","sumpos","extratg")
 Ritual.Operation = aux.FunctionWithNamedArgs(
@@ -184,36 +149,27 @@ function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselect
 				end
 				Ritual.CheckMatFilter(matfilter,e,tp,mg,mg2)
 				local ft=Duel.GetLocationCount(tp,LOCATION_MZONE)
-				-- Custom ----
-				local ExtraLocEff=Duel.IsPlayerAffectedByEffect(tp,EFFECT_EXTRA_RITUAL_LOCATION)
-				local tg=nil
-				local ExtraLoc=nil
-				local FinalGroup=Group.CreateGroup()
-				local BaseLocGroup=Duel.GetMatchingGroup(aux.NecroValleyFilter(Ritual.Filter),tp,location,0,nil,filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos)
-				local ExtraLocSingleEffGroup=Duel.GetMatchingGroup(aux.NecroValleyFilter(Ritual.ExtraLocFilter),tp,LOCATION_NOTHAND,0,nil,filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos,true)
-				FinalGroup:Merge(BaseLocGroup)
-				if #ExtraLocSingleEffGroup>0 then
-					FinalGroup:Merge(ExtraLocSingleEffGroup)
-				end
-				if ExtraLocEff and ExtraLocEff:CheckCountLimit(tp) then
-					ExtraLoc=ExtraLocEff:GetValue()
-					local ReqFunc=ExtraLocEff:GetTarget() or false
-					local ExtraLocGroup=Duel.GetMatchingGroup(aux.NecroValleyFilter(Ritual.ExtraLocFilter),tp,ExtraLoc,0,nil,filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos,false,ReqFunc)
-					FinalGroup:Merge(ExtraLocGroup)
-				end
-				if #FinalGroup>0 then
+				-- custom ----
+				local tg=Group.CreateGroup()
+				local final_group=Group.CreateGroup()
+				local base_ritual_group=Duel.GetMatchingGroup(aux.NecroValleyFilter(Ritual.Filter),tp,location,0,nil,filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos)
+				local extra_loc_group=Duel.GetMatchingGroup(aux.NecroValleyFilter(Ritual.ExtraLocFilter),tp,LOCATION_NOTHAND,0,nil,filter,_type,e,tp,mg,mg2,func,specificmatfilter,lv,requirementfunc,sumpos)
+				final_group:Merge(base_ritual_group)
+				final_group:Merge(extra_loc_group)
+				if #final_group>0 then
 					Duel.Hint(HINT_SELECTMSG,tp,HINTMSG_SPSUMMON)
-					tg=FinalGroup:Select(tp,1,1,nil)
+					tg=final_group:Select(tp,1,1,nil)
 				end
 				if #tg>0 then
-					if ExtraLocEff and ExtraLocEff:CheckCountLimit(tp) and tg:GetFirst():IsLocation(ExtraLoc) then
-						ExtraLocEff:UseCountLimit(tp)
-					end
-					if tg:IsExists(Ritual.ExtraLocSingleEffFilter,1,nil,tp,e:GetHandler()) then
-						tg:GetFirst():GetEffect(EFFECT_EXTRA_RITUAL_LOCATION):UseCountLimit(tp)
+					local tc=tg:GetFirst()
+					local extra_loc_eff=GetExtraLocationEffect(tc,e:GetHandler())
+					if extra_loc_eff and extra_loc_eff:CheckCountLimit(tp) then
+						local extra_loc=extra_loc_eff:GetTargetRange()
+						if extra_loc_eff:GetType()&EFFECT_TYPE_SINGLE>0 or extra_loc and tc:IsLocation(extra_loc) then
+							extra_loc_eff:UseCountLimit(tp)
+						end
 					end
 				--------
-					local tc=tg:GetFirst()
 					local lv=(lv and (type(lv)=="function" and lv(tc)) or lv) or tc:GetLevel()
 					lv=math.max(1,lv)
 					Ritual.SummoningLevel=lv

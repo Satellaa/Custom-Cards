@@ -11,7 +11,7 @@ function s.initial_effect(c)
 	e1:SetProperty(EFFECT_FLAG_SINGLE_RANGE|EFFECT_FLAG_IGNORE_IMMUNE|EFFECT_FLAG_CANNOT_DISABLE|EFFECT_FLAG_UNCOPYABLE)
 	e1:SetRange(LOCATION_DECK)
 	e1:SetCountLimit(1,id)
-	e1:SetTarget(function(_,rc) return rc:IsSetCard(SET_DOGMATIKA) and not rc:IsCode(id) end)
+	e1:SetTarget(function(_,_,rc) return rc:IsSetCard(SET_DOGMATIKA) and not rc:IsCode(id) end)
 	c:RegisterEffect(e1)
 	local e2=Ritual.AddProcGreater({
 		handler=c,
