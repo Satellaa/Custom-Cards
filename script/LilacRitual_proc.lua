@@ -7,6 +7,7 @@ if not Ritual then
 end
 
 EFFECT_EXTRA_RITUAL_LOCATION = 2500000001
+EFFECT_FLAG_GAIN_ONLY_ONE_PER_TURN = 0x20000000
 LOCATION_NOTHAND=LOCATION_DECK|LOCATION_REMOVED|LOCATION_GRAVE
 
 --required functions
@@ -52,6 +53,7 @@ function Ritual.ExtraLocFilter(c,filter,_type,e,tp,m,m2,forcedselection,specific
 	if not (c:IsOriginalType(TYPE_RITUAL) and c:IsOriginalType(TYPE_MONSTER)) or (filter and not filter(c)) or not c:IsCanBeSpecialSummoned(e,SUMMON_TYPE_RITUAL,tp,false,true,sumpos) then return false end
 	local extra_loc_eff,used=ExtraLocationOPTCheck(c,e:GetHandler(),tp)
 	if not extra_loc_eff or extra_loc_eff and used then return false end
+	if extra_loc_eff:GetProperty()&EFFECT_FLAG_GAIN_ONLY_ONE_PER_TURN>0 and Duel.HasFlagEffect(tp,EFFECT_FLAG_GAIN_ONLY_ONE_PER_TURN) then return false end
 	
 	local lv=(lv and (type(lv)=="function" and lv(c)) or lv) or c:GetLevel()
 	lv=math.max(1,lv)
@@ -167,6 +169,9 @@ function(filter,_type,lv,extrafil,extraop,matfilter,stage2,location,forcedselect
 						local extra_loc=extra_loc_eff:GetTargetRange()
 						if extra_loc_eff:GetType()&EFFECT_TYPE_SINGLE>0 or extra_loc and tc:IsLocation(extra_loc) then
 							extra_loc_eff:UseCountLimit(tp)
+							if extra_loc_eff:GetProperty()&EFFECT_FLAG_GAIN_ONLY_ONE_PER_TURN>0 then
+								Duel.RegisterFlagEffect(tp,EFFECT_FLAG_GAIN_ONLY_ONE_PER_TURN,RESET_PHASE|PHASE_END,0,1)
+							end
 						end
 					end
 				--------
